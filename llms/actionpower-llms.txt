@@ -1,0 +1,102 @@
+# Daglo (다글로)
+
+> Daglo는 ActionPower(액션파워)가 개발한 Voice Intelligence Workspace입니다.
+> 자체 개발 End-to-End 음성 인식 엔진으로 회의·통화·강의를 받아쓰고,
+> 그 위에서 AI 채팅·요약·슬라이드·문서번역·PDF 분석까지 하나의 워크스페이스에서
+> 처리합니다. 개인용 앱/웹, 팀플랜, 기업용 온프레미스, 개발자용 STT API를 제공합니다.
+
+주요 사실:
+- 회사: ActionPower Corp. (주식회사 액션파워), 2016년 서울 창업 (서울대 컴퓨터공학 연구자들)
+- 핵심 기술: 자체 개발 End-to-End 음성 인식 엔진 (Whisper 등 오픈소스 비의존)
+- 정확도: 공개 벤치마크 기준 최대 99%, 화자분리 95%+ 정확도
+- 지원 언어: 한국어, 영어, 일본어, 중국어 등 16개 (한·영 혼합 발화 처리)
+- 규모: 연간 음성 처리 1,300만 시간+, 사용자 200만+
+- 인증/투자: ISO 27001 인증, Series B(하나벤처스 주도, KDB 참여) — 누적 투자 200억 원+
+- 제품군: 웹/모바일 앱, 팀플랜, 온프레미스(폐쇄망), 실시간 gRPC STT API
+- 수상: Forbes Korea 대한민국 AI 50, Google for Startups AI First, Google Play 올해의 앱(2023), 장관상 다수
+- 주요 고객: LG전자, LG헬로비전, SK렌터카, 한컴, KT Skylife, ENA, kt cs,
+  대구광역시, NH농협은행, DB생명, 서울대학교병원, 강동경희대학교병원, Kantar
+
+사이트 구조: 페이지는 `/d/{lang}/...` 경로에 있으며 `lang`은 `ko` 또는 `en`입니다.
+영어 홈만 예외로 apex(https://daglo.ai/)가 정식 URL입니다.
+
+## 제품 (Products)
+- [홈 / Home (KO)](https://daglo.ai/d/ko): 다글로 소개
+- [제품 소개 / Product](https://daglo.ai/d/ko/product): 녹음·받아쓰기, AI 채팅, AI 슬라이드, 문서번역, PDF 분석, YouTube 요약
+- [요금제 / Pricing](https://daglo.ai/d/ko/pricing): Free ₩0 / Pro 월 ₩11,900 (연 ₩142,800) / Premium 월 ₩16,580 (연 ₩199,000) / Team 좌석당 월 ₩20,750 (연 ₩249,000)
+- [STT API (developers)](https://developers.daglo.ai): 개발자·기업용 실시간 및 배치 음성 인식 API
+
+## 솔루션 (Solutions)
+- [팀 / Teams](https://daglo.ai/d/ko/solutions/teams): 공유 워크스페이스, 중앙 결제, 좌석·크레딧 관리, 관리자 기능
+- [교육 / Education](https://daglo.ai/d/ko/solutions/education): 강의 녹음에서 요약·핵심 포인트·연습 퀴즈 자동 생성
+
+## 기업 고객 (Enterprise)
+- [기업 도입 문의 / Enterprise](https://daglo.ai/d/ko/enterprise): 클라우드 또는 폐쇄망 온프레미스, 도메인 파인튜닝, 프라이빗 LLM, SSO, 전담 지원
+- [고객 사례 / Customers](https://daglo.ai/d/ko/customers): 금융·공공·미디어·의료 도입 사례 (DB생명 온프레미스, 대구광역시 회의록 자동화 등)
+
+## 회사 (Company)
+- [회사 소개 / Company](https://daglo.ai/d/ko/company): 액션파워 미션과 연혁
+- [연구 & 기술 / Research](https://daglo.ai/d/ko/research): 각종 AI 연구 영역(STT, 화자분리/인식, 실시간, 음성향상, NLP, 감정인식, 영상요약, TTS 등), 등록 특허, 학회 논문 다수
+- [뉴스룸 / Newsroom](https://daglo.ai/d/ko/newsroom): 보도자료
+- [블로그 / Blog](https://daglo.ai/d/ko/blog)
+
+## 지원 (Support)
+- [사용 가이드 / Guide](https://daglo.ai/d/ko/guide)
+- [자주 묻는 질문 / FAQ](https://daglo.ai/d/ko/faq)
+- [개인정보처리방침 / Privacy Policy](https://daglo.ai/d/ko/legal/privacy)
+- [이용약관 / Terms of Service](https://daglo.ai/d/ko/legal/terms)
+
+## English
+- [Home](https://daglo.ai/)
+- [Pricing](https://daglo.ai/d/en/pricing)
+- [Product](https://daglo.ai/d/en/product)
+- [Teams](https://daglo.ai/d/en/solutions/teams)
+- [Education](https://daglo.ai/d/en/solutions/education)
+- [Enterprise](https://daglo.ai/d/en/enterprise)
+- [Customers](https://daglo.ai/d/en/customers)
+- [Company](https://daglo.ai/d/en/company)
+- [Research](https://daglo.ai/d/en/research)
+
+## Guides
+- 다글로란 무엇인가요?: https://daglo.ai/d/ko/guide/getting-started/what-is-daglo
+- 회원가입 및 계정 설정: https://daglo.ai/d/ko/guide/getting-started/daglo-signup
+- 화면 구성 둘러보기: https://daglo.ai/d/ko/guide/getting-started/explore-daglo
+- 파일 업로드 & 유튜브 영상 받아쓰기: https://daglo.ai/d/ko/guide/transcribe/file-youtube-transcription
+- 녹음 받아쓰기: https://daglo.ai/d/ko/guide/transcribe/recording-transcribe
+- 받아쓰기 후 AI 기능 활용하기: https://daglo.ai/d/ko/guide/transcribe/transcription-ai-feature
+- 참석자 관리: https://daglo.ai/d/ko/guide/transcribe/participant-management
+- 스페이스 생성 및 기본 설정: https://daglo.ai/d/ko/guide/teamplan/Teamplan-getting-started
+- 멤버 초대 및 관리: https://daglo.ai/d/ko/guide/teamplan/Teamplan-member-management
+- 팀 크레딧 및 요금 관리: https://daglo.ai/d/ko/guide/teamplan/Teamplan-seat-billing
+- AI 채팅 / AI 멀티모델: https://daglo.ai/d/ko/guide/ai-features/ai-feature-ai-chat
+- AI 슬라이드: https://daglo.ai/d/ko/guide/ai-features/ai-slides
+- 문서 번역: https://daglo.ai/d/ko/guide/ai-features/document-translate
+- PDF 분석: https://daglo.ai/d/ko/guide/ai-features/pdf-analysis
+- AI 퀴즈: https://daglo.ai/d/ko/guide/ai-features/ai-quiz
+- 나에게 맞는 플랜 찾기: https://daglo.ai/d/ko/guide/billing/plan-comparison
+- 크레딧이란?: https://daglo.ai/d/ko/guide/billing/credits
+- 결제 및 구독 관리: https://daglo.ai/d/ko/guide/billing/refund-and-cancel
+- 환불 정책: https://daglo.ai/d/ko/guide/billing/refund-policy
+
+## Blog (latest)
+- AI 채팅 신규 모델 및 기능 업데이트: https://daglo.ai/d/ko/blog/ai-chat-update
+- AI 퀴즈 주관식: https://daglo.ai/d/ko/blog/quiz
+- (완료) 유튜브 받아쓰기 장애 안내: https://daglo.ai/d/ko/blog/youtube-error
+- Slack, Notion과 연동해서 한 번에 작업할 수 있어요.📝: https://daglo.ai/d/ko/blog/slack-notion
+- 애플워치 녹음이 출시되었습니다.: https://daglo.ai/d/ko/blog/apple-watch
+- 세무사·회계사를 위한 고객 상담 자동 기록 가이드: https://daglo.ai/d/ko/blog/tax-accountant-client-consultation-recording-daglo
+- 부동산 중개인을 위한 고객 상담 녹음, 계약 조건 놓치지 않는 법: https://daglo.ai/d/ko/blog/realtor-client-consultation-recording-daglo
+- Team 스페이스를 소개합니다 👓: https://daglo.ai/d/ko/blog/update-team-space
+- 캘린더 연동으로 회의를 놓치지 마세요 📅: https://daglo.ai/d/ko/blog/update-calendar-integration
+- 자격증 시험 벼락치기, AI 강의 요약으로 하루 만에 정리하는 법: https://daglo.ai/d/ko/blog/jagyeokjeung-byeokchigi-ai-daglo
+- 이직 준비생 모의면접, AI로 녹음하고 답변 복기하는 법: https://daglo.ai/d/ko/blog/job-seeker-mock-interview-ai-recording-daglo
+- 면접 녹음 AI로 텍스트화, 채용 평가 근거 정리하는 법: https://daglo.ai/d/ko/blog/hr-interview-recording-ai-transcription-daglo
+- 마케팅 회의 아이디어, AI로 콘텐츠 기획안까지 자동 정리: https://daglo.ai/d/ko/blog/marketer-brainstorming-ai-content-plan-daglo
+- B2B 영업 미팅 요약, AI로 다음 액션까지 자동 정리하는 법: https://daglo.ai/d/ko/blog/b2b-sales-meeting-ai-summary-daglo
+- 인턴 첫 주에 절대 하면 안 되는 실수 5가지: https://daglo.ai/d/ko/blog/intern-first-week-mistakes-5
+- 컨설턴트 클라이언트 미팅, AI 회의록으로 기록해야 하는 이유: https://daglo.ai/d/ko/blog/consultant-client-meeting-ai-recording
+- 변호사·법무팀을 위한 상담 자동 기록 가이드: https://daglo.ai/d/ko/blog/lawyer-consultation-automatic-recording-guide
+- 회의록 작성에 AI 쓴 지 3개월, 실제로 달라진 것들: https://daglo.ai/d/ko/blog/hoeuirok-jakseong-ai-3gaewol-hugi
+- AI 회의록 자동 작성, 실제로 얼마나 정확할까? 직접 테스트해봤습니다: https://daglo.ai/d/ko/blog/ai-hoeuirok-jadong-jakseong-jeonghwakdo-test
+- Otter.ai vs 다글로, 한국어 회의 정확도 실전 비교: https://daglo.ai/d/ko/blog/otter-ai-vs-daglo-hangugeo-hoeui-jeonghwakdo
+- All posts: https://daglo.ai/d/ko/blog

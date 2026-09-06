@@ -1,0 +1,141 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://developers.daglo.ai/guide/en/STT-Async.html, https://developers.daglo.ai/guide/Quick-Speech-Voice-To-Text.html,
+  https://developers.daglo.ai/guide/Language-chat-completion.html, https://developers.daglo.ai/guide/Language-Text-To-Speech.html,
+  https://developers.daglo.ai/guide/Polling-and-Callback.html
+note: >-
+  Request/response examples exactly as ActionPower publishes them. Placeholder tokens are the provider's
+  own (<API_TOKEN>); the sample audio URL and the expected transcript are real and callable.
+  The production OpenAPI also carries 36 in-spec `example:` values on individual fields.
+examples:
+  - name: Submit long audio for asynchronous transcription
+    operation: post-stt-v1-async-transcripts
+    request:
+      method: POST
+      url: https://apis.daglo.ai/stt/v1/async/transcripts
+      headers:
+        Content-Type: application/json
+        Authorization: 'Bearer <API_TOKEN>'
+      body: |-
+        {
+            "audio": {
+                "source": {
+                    "url": "https://storage.googleapis.com/bkt-actionpower-examples/audio/actionpower_hello.wav"
+                }
+            }
+        }
+    response:
+      status: 200
+      body: '{"rid":"12345678-abcd-efgh-1234-abcdefghijkl"}'
+  - name: Poll an asynchronous transcription
+    operation: get-stt-v1-async-transctips-rid
+    request:
+      method: GET
+      url: https://apis.daglo.ai/stt/v1/async/transcripts/<RID>
+      headers:
+        Authorization: 'Bearer <API_TOKEN>'
+    response:
+      status: 200
+      body: |-
+        {
+            "rid": "12345678-abcd-efgh-1234-abcdefghijkl",
+            "status": "transcribed",
+            "sttResults": [
+                {
+                    "transcript": "안녕하세요. 액션 파워입니다.",
+                    "words": [
+                        {
+                            "word": "안녕하세요. ",
+                            "startTime": { "nanos": 60000000, "seconds": "0" },
+                            "endTime":   { "nanos": 860000000, "seconds": "0" },
+                            "segmentId": "1"
+                        }
+                    ],
+                    "keywords": null
+                }
+            ]
+        }
+  - name: Register a callback instead of polling
+    operation: post-stt-v1-async-transcripts
+    request:
+      method: POST
+      url: https://apis.daglo.ai/stt/v1/async/transcripts
+      body: |-
+        {
+            "callback": {
+                "url": "https://client.example.com/callback",
+                "headers": { "<Header1_KEY>": "<Header1_Value>" }
+            }
+        }
+    callback_delivery:
+      method: POST
+      url: https://client.example.com/callback
+      headers:
+        Content-Type: application/json
+      body: |-
+        {
+          "status": "transcribed",
+          "sttResults": [ { "transcript": "안녕하세요, 예제입니다." } ]
+        }
+  - name: Generate a chat completion
+    operation: post-nlp-v1-sync-chat-completions
+    contract_note: >-
+      Documented in the guide and present in openapi/actionpower-daglo-cloud-api-dev-openapi.yml only —
+      the production document does not describe this endpoint.
+    request:
+      method: POST
+      url: https://apis.daglo.ai/nlp/v1/sync/chat/completions
+      headers:
+        Content-Type: application/json
+        Authorization: 'Bearer <API_TOKEN>'
+      body: |-
+        {
+            "model": "elli",
+            "messages": [
+                { "role": "system", "content": "당신은 초등학교 교사입니다." },
+                { "role": "user", "content": "금리에 대해서 초등학생이 이해 가능한 수준으로 설명해 주세요." }
+            ],
+            "topP": 0.9
+        }
+    response:
+      status: 200
+      body: |-
+        {
+            "rid": "<RID>",
+            "model": "elli",
+            "chatResults": [
+                {
+                    "index": 0,
+                    "message": { "role": "assistant", "content": "..." },
+                    "finishReason": "stop"
+                }
+            ],
+            "usage": { "promptTokens": 23, "completionTokens": 78, "totalTokens": 101 }
+        }
+  - name: Synthesize speech
+    operation: post-tts-v1-sync-audios
+    request:
+      method: POST
+      url: https://apis.daglo.ai/tts/v1/sync/audios
+      headers:
+        Content-Type: application/json
+        Authorization: 'Bearer <API_TOKEN>'
+      body: '{ "text": "안녕하세요. 액션파워입니다."}'
+    response:
+      status: 200
+      content_type: audio/wav
+      body: a WAV file
+    voices:
+      - {id: en_US_Olivia, language: en_US, description: 'Olivia — adult, female, friendly'}
+      - {id: ko_KR_Jimin, language: ko_KR, description: 'Jimin — adult, female, calm'}
+  - name: Realtime streaming transcription (gRPC)
+    contract: grpc/actionpower-speech.proto
+    request:
+      command: python client.py --server apis.daglo.ai --token $API_TOKEN
+      metadata:
+        authorization: 'Bearer <API_TOKEN>'
+      audio: LINEAR16, 16000 Hz, mono, 0.25s chunks
+      config: '{language_code: ko-KR, interim_results: true, max_silence_ms: 2500}'
+    response:
+      stream: StreamingRecognizeResponse with StreamingRecognitionResult {transcript, is_final, language_code}

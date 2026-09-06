@@ -1,0 +1,78 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the daglo Cloud API
+  version: 1.0.0
+extends: openapi/actionpower-daglo-cloud-api-openapi.yml
+x-generated: '2026-09-06'
+x-method: generated
+x-source: >-
+  Derived from artifacts in this repository (conventions, rate-limits, errors, lifecycle, plans,
+  webhooks) plus the provider's own guide at https://developers.daglo.ai/guide/en/. Applied as an
+  overlay so the harvested contract at openapi/_original/ is never mutated.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-profile: https://apis.io/provider/actionpower
+      x-api-evangelist-note: >-
+        The published document carries no servers[] block. The host added in
+        openapi/actionpower-daglo-cloud-api-openapi.yml is the base URL the provider's own guide and
+        curl examples use.
+  - target: $.info
+    update:
+      x-rate-limit:
+        scope: per-endpoint
+        limit: 20
+        window: 1s
+        exhaustion_status: 429
+        response_headers: none
+        source: rate-limits/actionpower-rate-limits.yml
+  - target: $.info
+    update:
+      x-idempotency:
+        supported: false
+        coverage: none
+        source: conventions/actionpower-conventions.yml
+      x-reversibility:
+        grade: none
+        reversal_operations: []
+        source: conventions/actionpower-conventions.yml
+  - target: $.info
+    update:
+      x-error-envelope:
+        content_type: application/json
+        shape: '{"error": "<string>"}'
+        rfc9457: false
+        source: errors/actionpower-problem-types.yml
+  - target: $.info
+    update:
+      x-pricing:
+        currency: KRW
+        sync_stt_per_minute: 10
+        async_stt_per_minute: 10
+        stream_stt_per_minute: 10
+        tts_per_1000_characters: 15
+        minutes_summary_per_call: 90
+        vat_excluded: true
+        source: plans/actionpower-plans-pricing.yml
+  - target: $.paths['/stt/v1/async/transcripts'].post
+    update:
+      x-async-pattern:
+        returns: rid
+        poll_with: get-stt-v1-async-transctips-rid
+        callback_field: callback
+        callback_signature: none
+        terminal_success: transcribed
+        terminal_failure: [transcript_error, file_error]
+        source: asyncapi/actionpower-daglo-webhooks.yml
+  - target: $.paths['/nlp/v1/async/minutes'].post
+    update:
+      x-async-pattern:
+        returns: rid
+        poll_with: get-nlp-v1-async-minutes-rid
+        callback_field: callback
+        source: asyncapi/actionpower-daglo-webhooks.yml
+  - target: $.components.securitySchemes.BearerAuth
+    update:
+      x-token-issuance: daglo Developers console -> Token menu (https://developers.daglo.ai/console/token)
+      x-token-scope: account-wide; no OAuth scopes
+      x-grpc-transport: passed as the "authorization" gRPC metadata entry on the streaming surface

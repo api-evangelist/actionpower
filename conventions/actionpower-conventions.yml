@@ -1,0 +1,116 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://developers.daglo.ai/guide/en/ (all guide pages), https://developers.daglo.ai/guide/Polling-and-Callback.html,
+  https://apis.daglo.ai/docs and openapi/actionpower-daglo-cloud-api-openapi.yml
+summary: >-
+  A small, consistent async-job API. One bearer token, one host, path-versioned resources shaped
+  /{domain}/v1/{sync|async}/{resource}. Every long-running call returns a request id (rid) that is
+  either polled or delivered to a caller-supplied callback URL. There is no idempotency contract, no
+  pagination, no request-id tracing header, and no rate-limit response headers — the runtime signals an
+  agent needs most are the ones this API does not emit.
+authentication:
+  style: bearer token
+  header: Authorization
+  format: 'Bearer <API_TOKEN>'
+  issuance: daglo Developers console -> Token menu
+  scopes: none — the token is account-wide
+  transport_note: >-
+    The gRPC streaming surface uses the same token, passed as an "authorization" metadata entry rather
+    than an HTTP header.
+  docs: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+idempotency:
+  supported: false
+  coverage: none
+  mechanism: null
+  header: null
+  retention: null
+  evidence: >-
+    No Idempotency-Key (or equivalent) header or body field appears anywhere in the production or dev
+    OpenAPI documents, and no guide page mentions replay protection. Re-POSTing the same audio creates a
+    new rid and is billed again. The `custom` object echoed back in responses is a correlation
+    convenience for the caller, not a server-side dedupe key — the server does not use it to collapse
+    duplicates.
+  agent_impact: >-
+    A retried transcription after a timeout is a second billable job, and the caller has no way to ask
+    the server whether the first one already ran.
+reversibility:
+  grade: none
+  state: not-documented
+  write_surface: true
+  reversal_operations: []
+  window: null
+  evidence: >-
+    The public production contract has nine operations; six of them are writes (job submissions) and
+    none of them has a cancel, abort, delete or refund counterpart. There is no DELETE anywhere in the
+    production document, no documented way to stop an async transcription once submitted, and no
+    documented way to delete a stored transcript or the uploaded media through the API. The dev
+    document adds one genuine reversal — DELETE /video/v1/data/faces/{faceId} undoes
+    POST /video/v1/data/faces — but that surface is not part of the published production contract and
+    carries no stated window either.
+  note: >-
+    Not `na`: this API has a write surface and it is billed by the minute, so reversibility is in the
+    denominator. No window is asserted here because the provider states none anywhere.
+dry_run_mode:
+  supported: false
+  note: >-
+    No sandbox/test mode flag and no test-vs-live key separation. The only rehearsal path is the free
+    credit grant on a new account (see sandbox/actionpower-sandbox.yml), which exercises production.
+pagination:
+  supported: false
+  note: >-
+    No collection endpoints exist. Every operation acts on a single job or a single body of text, so
+    there is nothing to page. `na` rather than a gap.
+asynchrony:
+  pattern: submit-then-poll, or submit-with-callback
+  submit_returns: '{"rid": "<uuid>", "fileName": "...", "custom": {...}}'
+  poll:
+    operation: get-stt-v1-async-transctips-rid
+    path: /stt/v1/async/transcripts/{rid}
+    status_field: status
+    terminal_success: transcribed
+    terminal_failure: [transcript_error, file_error]
+  callback:
+    request_field: callback
+    subfields: [url, headers]
+    delivery: 'POST to the caller-supplied URL, application/json, same body shape as the polling GET'
+    deprecated_alternative: callbackUrl (marked DEPRECATED in the contract; use callback.url)
+    docs: https://developers.daglo.ai/guide/Polling-and-Callback.html
+    security_note: >-
+      The provider defines no signature, HMAC or shared-secret verification for callbacks. Receivers
+      authenticate the sender only by whatever static headers they themselves supply in callback.headers.
+  correlation:
+    field: custom
+    behaviour: an arbitrary caller object echoed verbatim in the response and the callback
+versioning:
+  scheme: uri-path
+  current: v1
+  note: >-
+    /stt/v1, /nlp/v1, /tts/v1. The dev-environment document still carries a /stt/v4/short-transcripts
+    operation explicitly summarized "[Deprecated]", so the version numbering is not a single ascending
+    line across products.
+error_envelope:
+  content_type: application/json
+  shape: '{"error": "<message string>"}'
+  rfc9457: false
+  detail: see errors/actionpower-problem-types.yml
+rate_limit_signaling:
+  documented_limit: 20 requests/sec per endpoint
+  exhaustion_status: 429
+  response_headers: none documented
+  retry_after: not documented
+  detail: see rate-limits/actionpower-rate-limits.yml
+request_tracing:
+  request_id_header: none
+  note: >-
+    No X-Request-Id / trace header is documented on requests or responses. The only correlation handle
+    is the application-level `rid` returned by async submissions.
+content_negotiation:
+  request: application/json or multipart/form-data (audio may be uploaded directly or referenced by public URL)
+  response: application/json; audio/wav for TTS; text/plain for subtitle-file exports (srt/vtt/txt)
+cross_links:
+  errors: errors/actionpower-problem-types.yml
+  lifecycle: lifecycle/actionpower-lifecycle.yml
+  authentication: authentication/actionpower-authentication.yml
+  rate_limits: rate-limits/actionpower-rate-limits.yml
+  webhooks: asyncapi/actionpower-daglo-webhooks.yml

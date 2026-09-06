@@ -1,0 +1,13 @@
+generated: '2026-09-06'
+method: derived
+source: openapi/actionpower-daglo-cloud-api-dev-openapi.yml, openapi/actionpower-daglo-cloud-api-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/actionpower-daglo-cloud-api-dev-openapi.yml
+  - openapi/actionpower-daglo-cloud-api-openapi.yml

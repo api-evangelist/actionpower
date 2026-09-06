@@ -1,0 +1,24 @@
+generated: '2026-09-06'
+method: generated
+source: >-
+  openapi/actionpower-daglo-cloud-api-openapi.yml, grpc/actionpower-speech.proto and the artifacts in
+  this repository (conventions, errors, rate-limits, plans, sandbox). Every operationId referenced was
+  grepped out of the contract; none is invented. ActionPower publishes no AGENTS.md or skill files of its
+  own — searched the developer portal, the guide and the GitHub organization.
+skills:
+  - file: actionpower-transcribe-long-audio.md
+    name: Transcribe long audio with the daglo Cloud API
+    api: openapi/actionpower-daglo-cloud-api-openapi.yml
+    operations: [post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format]
+  - file: actionpower-summarize-and-minutes.md
+    name: Summarize a conversation and generate meeting minutes with daglo
+    api: openapi/actionpower-daglo-cloud-api-openapi.yml
+    operations: [post-nlp-v1-sync-summaries, post-nlp-v1-sync-paragraphs, post-nlp-v1-async-minutes, get-nlp-v1-async-minutes-rid]
+  - file: actionpower-realtime-streaming-stt.md
+    name: Stream realtime speech to text with daglo over gRPC
+    api: grpc/actionpower-speech.proto
+    operations: ['dagloapis.speech.v1.Speech/StreamingRecognize']
+  - file: actionpower-synthesize-speech.md
+    name: Synthesize speech from text with daglo TTS
+    api: openapi/actionpower-daglo-cloud-api-openapi.yml
+    operations: [post-tts-v1-sync-audios]

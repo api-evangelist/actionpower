@@ -1,0 +1,26 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the daglo Cloud API (dev environment document)
+  version: 1.0.0
+extends: openapi/actionpower-daglo-cloud-api-dev-openapi.yml
+x-generated: '2026-09-06'
+x-method: generated
+x-source: >-
+  Derived from lifecycle/actionpower-lifecycle.yml. This overlay exists to record, on the document
+  itself, that this is the dev-environment contract served at https://apis.daglo.ai/openapi.dev.yaml and
+  that it is a superset of the production document.
+actions:
+  - target: $.info
+    update:
+      x-contract-role: dev-environment document
+      x-served-at: https://apis.daglo.ai/openapi.dev.yaml
+      x-production-counterpart: openapi/actionpower-daglo-cloud-api-openapi.yml
+      x-drift-note: >-
+        30 operations here against 9 in the production document. The chat-completion endpoint the
+        provider documents publicly (POST /nlp/v1/sync/chat/completions) exists only here; the image and
+        video operations are described in neither guide.
+  - target: $.paths['/stt/v4/short-transcripts'].post
+    update:
+      x-deprecated-note: >-
+        Summary is marked [Deprecated]; no sunset date is published anywhere. Replacement is
+        post-stt-v1-sync-transcripts. See lifecycle/actionpower-lifecycle.yml.

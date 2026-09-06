@@ -1,0 +1,73 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  npm registry search + registry.npmjs.org metadata, PyPI, and the ActionPower GitHub organization
+  (https://github.com/actionpower). No PyPI, RubyGems, Maven, NuGet, crates.io or Go module publishes
+  a daglo client.
+note: >-
+  ActionPower publishes exactly one first-party daglo API client — a browser JavaScript SDK for the
+  realtime streaming STT surface — and it is distributed as GitHub source only, with no npm package and
+  no tagged release. Its last commit is 2025-03-23, which predates the current production contract, and
+  it is still named "-beta". The two @actionpower npm packages that DO exist are internal engineering
+  tooling (an i18n spreadsheet converter and a React UI kit), not API clients; they are recorded here
+  with api_client: false so they are not mistaken for SDKs. Every other language the API supports has
+  no first-party client at all — the docs teach raw curl for REST and raw grpcio for streaming.
+packages:
+  - language: javascript
+    registry: github
+    name: dagloapi-js-beta
+    url: https://github.com/actionpower/dagloapi-js-beta
+    install: git clone https://github.com/actionpower/dagloapi-js-beta
+    official: true
+    api_client: true
+    covers: realtime streaming STT (browser microphone capture -> transcript events)
+    version: null
+    published: null
+    version_note: >-
+      No registry to query — the package is not on npm and the repository publishes no tags or releases,
+      so there is no version a consumer can pin. Last commit to main 2025-03-23. Recorded as null rather
+      than guessed.
+    license: see repository LICENSE
+  - language: python
+    registry: null
+    name: null
+    url: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
+    official: false
+    api_client: false
+    version: null
+    published: null
+    note: >-
+      No first-party Python SDK. The realtime guide instructs developers to save the published
+      speech.proto and generate their own stubs with grpc_tools.protoc, and the REST guides use curl.
+      Recorded as an honest absence.
+  - language: javascript
+    registry: npm
+    name: "@actionpower/i18n-spreadsheet-to-json"
+    url: https://www.npmjs.com/package/@actionpower/i18n-spreadsheet-to-json
+    install: npm install @actionpower/i18n-spreadsheet-to-json
+    official: true
+    api_client: false
+    version: 1.2.3
+    published: '2026-05-19'
+    note: Internal engineering tool (Google Sheets to i18n JSON). Not a daglo API client.
+  - language: javascript
+    registry: npm
+    name: "@actionpower/daglo-ui"
+    url: https://www.npmjs.com/package/@actionpower/daglo-ui
+    install: npm install @actionpower/daglo-ui
+    official: true
+    api_client: false
+    version: 0.2.25
+    published: '2024-06-19'
+    note: >-
+      React/Tailwind/Shadcn UI component library used by the daglo product surface. Not a daglo API
+      client, and unpublished since 2024-06-19.
+summary:
+  official_api_clients: 1
+  registries_with_a_client: 0
+  languages_covered: [javascript]
+  languages_missing: [python, java, go, ruby, php, csharp, rust]
+  strongest_decay_signal: >-
+    The only first-party API client has no registry release at all and last changed 2025-03-23, while
+    the API it wraps is documented as of 2024-09-02 and the production OpenAPI is still being served
+    alongside a larger dev-environment document — a consumer cannot pin a version because none is published.

@@ -64,5 +64,47 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Actionpower is a company surfaced via the API Evangelist harvest backlog (source: secondary-market) and added to the network as a stub for full-pipeline profiling.
-- https://equityzen.com/company/actionpower
+ActionPower Corp. (주식회사 액션파워) is a Seoul deep-tech AI company founded in 2016 that builds its own
+end-to-end speech recognition, speaker diarization, speech synthesis and small-language-model stack. It
+sells that stack two ways: **daglo**, a voice-intelligence workspace used by more than two million people
+to record, transcribe, summarize and translate meetings, calls and lectures; and the **daglo Cloud API**
+at `https://apis.daglo.ai`, the developer platform this profile covers.
+
+## What this profile found
+
+| Surface | Evidence |
+|---|---|
+| OpenAPI 3.0.0, 9 operations (production) | `https://apis.daglo.ai/openapi.prod.yaml`, rendered at `https://apis.daglo.ai/docs` |
+| OpenAPI 3.0.0, 30 operations (dev environment) | `https://apis.daglo.ai/openapi.dev.yaml` |
+| proto3 gRPC contract for realtime streaming STT | published verbatim in the guide, saved to `grpc/` |
+| `llms.txt` | served at `https://daglo.ai/llms.txt` |
+| Published API unit pricing and three plans | `https://developers.daglo.ai/pricing` |
+| Rate limit: 20 req/sec per endpoint | stated in the OpenAPI `info.description` |
+| Webhook/callback event surface | `https://developers.daglo.ai/guide/Polling-and-Callback.html` |
+| ISO 27001 certification claim | `https://daglo.ai/d/en/enterprise` |
+| No MCP server, no A2A agent card, no `/.well-known/` documents | probed 2026-09-06, all misses recorded |
+
+The contract was found on the API host root, not the docs host: `developers.daglo.ai` is a single-page
+console that answers HTTP 200 with the same HTML shell for every path, while the real specification is
+served by `apis.daglo.ai` and named in the Stoplight Elements loader on `/docs`.
+
+## Two contracts that disagree
+
+`apis.daglo.ai` serves both a production document and a larger dev-environment document, and the
+provider's own guide teaches an endpoint (`POST /nlp/v1/sync/chat/completions`) that appears **only** in
+the dev document. Image and video operations appear only there too. Both are saved verbatim under
+`openapi/_original/` and the divergence is recorded in `lifecycle/actionpower-lifecycle.yml`.
+
+## Gaps worth a provider's attention
+
+- No idempotency mechanism anywhere; a retried transcription is a second billable job.
+- No cancel, delete or any other reversal operation on the public write surface.
+- No `Retry-After` or `RateLimit-*` response headers, so a caller hitting the documented 20 req/sec limit
+  has no runtime signal to back off against.
+- Callbacks carry no signature, HMAC or shared secret — a receiver cannot verify the sender.
+- No status page, no deprecation policy, no `security.txt`, and one dated changelog entry from 2024-09-02.
+- The only first-party API client (`actionpower/dagloapi-js-beta`) has no registry release and no version
+  tag, so a consumer cannot pin it.
+
+Everything above is assembled from public URLs; each artifact records the URL it came from and the HTTP
+status that URL returned.

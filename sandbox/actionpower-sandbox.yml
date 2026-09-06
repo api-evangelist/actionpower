@@ -1,0 +1,52 @@
+generated: '2026-09-06'
+method: searched
+source: https://developers.daglo.ai/guide/en/FAQ.html, https://developers.daglo.ai/guide/en/STT-Async.html
+summary: >-
+  There is no sandbox environment and no test-vs-live key separation. What ActionPower publishes instead
+  is a free credit grant on a new developer account and one public sample audio file, both of which run
+  against the production host with a production token.
+test_environment:
+  separate_host: false
+  test_mode_flag: false
+  key_prefix_separation: false
+  note: >-
+    One host (https://apis.daglo.ai) and one kind of token. A key that works for testing is the same key
+    that bills, so an agent cannot tell a rehearsal from a real call by inspecting the credential.
+free_tier:
+  mechanism: credits granted to a new account
+  published_allowance: >-
+    "New accounts will be given credits that can be used for testing for about 10 hours of async speech
+    recognition."
+  exhaustion_behaviour: >-
+    "Once all the free points have been exhausted, your request will be interrupted and you will not be
+    able to get response to any additional requests." Continuing requires registering a card or arranging
+    a prepaid contract with api-support@daglo.ai.
+  card_required_upfront: false
+  source: https://developers.daglo.ai/guide/en/FAQ.html
+published_test_fixtures:
+  - kind: sample audio file
+    value: https://storage.googleapis.com/bkt-actionpower-examples/audio/actionpower_hello.wav
+    used_by: [post-stt-v1-async-transcripts, post-stt-v1-sync-transcripts]
+    expected_transcript: '안녕하세요. 액션 파워입니다. 음성 인식의 선두주자 액션 파워의 기술을 만나보세요.'
+    note: >-
+      Published verbatim in the provider's own quick-start curl example and hosted by ActionPower on
+      Google Cloud Storage. It is the one fixture a caller can use without supplying their own media.
+  - kind: placeholder request id
+    value: 12345678-abcd-efgh-1234-abcdefghijkl
+    note: >-
+      A documentation placeholder shown in the guide's POST response, not a working rid. It is not a
+      valid UUID (it contains 'g' and 'h'), so it cannot be mistaken for a live one.
+gated_surfaces:
+  - surface: realtime streaming STT (gRPC)
+    gate: >-
+      "Stream STT is only available to customers who have additional permissions. If you wish to use it,
+      please contact api-support@daglo.ai." A self-serve account cannot exercise the streaming surface at
+      all, in test or in production.
+    source: https://developers.daglo.ai/guide/en/FAQ.html
+absent:
+  test_clocks: false
+  fixture_triggers: false
+  simulated_failures: false
+  note: >-
+    No time simulation, no way to force a transcript_error or file_error, and no way to trigger a callback
+    without spending real credits on real audio.

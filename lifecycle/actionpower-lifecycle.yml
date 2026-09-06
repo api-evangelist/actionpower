@@ -1,0 +1,69 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://developers.daglo.ai/guide/en/ (per-page "Update History" blocks),
+  openapi/actionpower-daglo-cloud-api-openapi.yml, openapi/actionpower-daglo-cloud-api-dev-openapi.yml
+versioning:
+  scheme: uri-path
+  current: v1
+  docs: https://developers.daglo.ai/guide/en/
+  note: >-
+    Each product family carries its own path version (/stt/v1, /nlp/v1, /tts/v1, plus /image/v1 and
+    /video/v1 in the dev document). The dev document also still serves /stt/v4/short-transcripts, so v4
+    is an older generation of the short-audio endpoint that predates the v1 renumbering, not a newer one.
+deprecation:
+  policy_url: null
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    No deprecation or sunset policy is published anywhere: no notice period, no removal date, no
+    RFC 8594 Sunset/Deprecation header support. Deprecation is communicated only by marking an item
+    inside the contract itself — the [Deprecated] summary on the v4 short-audio operation and the
+    "[🚫 DEPRECATED]" note on the callbackUrl request field — with no stated date by which either stops
+    working. No Deprecation pointer is emitted in apis.yml because there is no policy page to point at.
+deprecated_operations:
+  - operation: post-stt-v4-short-transcripts
+    path: /stt/v4/short-transcripts
+    source: openapi/actionpower-daglo-cloud-api-dev-openapi.yml
+    summary: '[Deprecated] Transcribe short audio'
+    replacement: post-stt-v1-sync-transcripts
+    sunset_date: null
+deprecated_fields:
+  - field: callbackUrl
+    on: post-stt-v1-async-transcripts (request body)
+    replacement: callback.url
+    sunset_date: null
+sla:
+  url: null
+  uptime_target: null
+  note: >-
+    No published SLA or uptime commitment on the public surface. The enterprise page offers a named
+    support team and incident response for on-premise contracts, but publishes no numeric target.
+status_page: null
+status_page_note: >-
+  No status page. status.daglo.ai and status.actionpower.kr do not resolve (NXDOMAIN, probed
+  2026-09-06), and no incident/uptime page is linked from the developer portal, the guide or the
+  console. Operational incidents are announced on the product blog instead — e.g.
+  https://daglo.ai/d/ko/blog/youtube-error — which is not an API status surface. No StatusPage pointer
+  is emitted in apis.yml.
+support:
+  api_support_email: api-support@daglo.ai
+  contract_contact: cs@daglo.ai
+  faq: https://developers.daglo.ai/guide/en/FAQ.html
+contract_documents:
+  - file: openapi/actionpower-daglo-cloud-api-openapi.yml
+    served_at: https://apis.daglo.ai/openapi.prod.yaml
+    operations: 9
+    role: production
+  - file: openapi/actionpower-daglo-cloud-api-dev-openapi.yml
+    served_at: https://apis.daglo.ai/openapi.dev.yaml
+    operations: 30
+    role: dev environment
+    drift_note: >-
+      The two documents disagree, and the public guide follows the larger one. The chat-completion
+      endpoint the provider documents at https://developers.daglo.ai/guide/Language-chat-completion.html
+      (POST /nlp/v1/sync/chat/completions) exists only in the dev document; the production document does
+      not describe it. Image and video operations appear only in the dev document and are not documented
+      in the guide at all. A consumer reading the reference rendered at https://apis.daglo.ai/docs, which
+      loads openapi.prod.yaml, will not find an endpoint the provider's own guide teaches.

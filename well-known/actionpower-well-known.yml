@@ -1,0 +1,115 @@
+generated: '2026-09-06'
+method: probed
+source: live GET of the named /.well-known/ path list on every host this record knows
+note: >-
+  No host ActionPower controls serves any of the probed discovery documents. Two of the four hosts are
+  catch-all front ends and their status codes must not be read as hits: developers.daglo.ai (the daglo
+  Developers console) is a Vite single-page app that answers HTTP 200 with the same 554-byte HTML shell
+  for EVERY path, including a negative-control path that cannot exist, so its 200s are recorded here as
+  soft-404s and earn nothing; daglo.ai and actionpower.kr both return a real 404 status with an HTML
+  error page. apis.daglo.ai — the API host itself — returns a clean JSON 404 body
+  ({"error_msg":"404 Route Not Found"}) for every path, which is a genuine, well-behaved negative.
+  hit_count is 0, and no WellKnown or SecurityTxt pointer is emitted in apis.yml.
+hit_count: 0
+path_echo_control: passed
+soft_404_control:
+  - host: https://developers.daglo.ai
+    path: /.well-known/actionpower-negative-control-7f3ab91c.json
+    status: 200
+    bytes: 554
+    verdict: catch-all SPA shell — every 200 on this host is a soft 404
+  - host: https://apis.daglo.ai
+    path: /.well-known/actionpower-negative-control-7f3ab91c.json
+    status: 404
+    bytes: 36
+    verdict: honest 404
+hosts:
+  - host: https://apis.daglo.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/aauth-resource.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/apis.json, status: 404}
+      - {path: /apis.json, status: 404}
+      - {path: /apis.yml, status: 404}
+      - {path: /llms.txt, status: 404}
+  - host: https://daglo.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/aauth-resource.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/apis.json, status: 404}
+      - {path: /apis.json, status: 404}
+      - {path: /apis.yml, status: 404}
+      - path: /llms.txt
+        status: 200
+        file: ../llms/actionpower-llms.txt
+        note: >-
+          Served, and a real llms.txt — but it is not a /.well-known/ document; it is indexed here for
+          completeness and pointed at from apis.yml as type LLMsTxt, not WellKnown.
+  - host: https://www.daglo.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/aauth-resource.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/apis.json, status: 404}
+      - {path: /apis.json, status: 404}
+      - {path: /apis.yml, status: 404}
+      - {path: /llms.txt, status: 200, note: same document as the apex host}
+  - host: https://developers.daglo.ai
+    note: catch-all SPA — all 200s below are the same HTML shell, counted as misses
+    documents:
+      - {path: /.well-known/security.txt, status: 200, soft_404: true}
+      - {path: /.well-known/openid-configuration, status: 200, soft_404: true}
+      - {path: /.well-known/oauth-authorization-server, status: 200, soft_404: true}
+      - {path: /.well-known/oauth-protected-resource, status: 200, soft_404: true}
+      - {path: /.well-known/api-catalog, status: 200, soft_404: true}
+      - {path: /.well-known/ai-plugin.json, status: 200, soft_404: true}
+      - {path: /.well-known/aauth-resource.json, status: 200, soft_404: true}
+      - {path: /.well-known/agent-card.json, status: 200, soft_404: true}
+      - {path: /.well-known/agent.json, status: 200, soft_404: true}
+      - {path: /.well-known/apis.json, status: 200, soft_404: true}
+      - {path: /apis.json, status: 200, soft_404: true}
+      - {path: /apis.yml, status: 200, soft_404: true}
+      - {path: /llms.txt, status: 200, soft_404: true}
+  - host: https://actionpower.kr
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/aauth-resource.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/apis.json, status: 404}
+      - {path: /apis.json, status: 404}
+      - {path: /apis.yml, status: 404}
+      - {path: /llms.txt, status: 404}
+  - host: https://www.actionpower.kr
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+      - {path: /.well-known/apis.json, status: 404}
+      - {path: /apis.json, status: 404}
+      - {path: /llms.txt, status: 404}

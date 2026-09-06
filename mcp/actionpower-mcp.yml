@@ -1,0 +1,72 @@
+generated: '2026-09-06'
+method: derived
+status: candidate
+source: openapi/actionpower-daglo-cloud-api-openapi.yml
+search_note: >-
+  No MCP server exists. Searched the developer portal, the guide, the ActionPower GitHub organization
+  (10 public repos, none MCP-related), npm under @actionpower and the public MCP registries; probed
+  https://apis.daglo.ai/mcp (404), https://mcp.daglo.ai (NXDOMAIN) and the /.well-known/ surface on
+  every host — nothing. developers.daglo.ai/mcp answers 200 but with the same SPA shell it returns for
+  every path, so it is a soft 404, not a server. The tool list below is
+  a candidate DERIVED from the published OpenAPI so the agent surface is at least describable; it is not
+  something ActionPower ships, and the apis.yml pointer is type X-MCPServerCandidate, never MCPServer.
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: api-key
+  auth_note: >-
+    If a server existed it would carry the same account-wide bearer token the REST API uses; there is no
+    OAuth surface to delegate to.
+  verified: searched
+server:
+  name: daglo
+  transport: null
+  url: null
+tools:
+  - name: transcribe_audio_sync
+    description: Transcribe a short audio file (up to 30 seconds) and return the transcript inline.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-stt-v1-sync-transcripts
+    action_class: acting
+  - name: submit_audio_for_transcription
+    description: Submit long audio (up to 2GB / 4 hours) for asynchronous transcription and receive a request id.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-stt-v1-async-transcripts
+    action_class: acting
+  - name: get_transcription
+    description: Fetch the status and result of an asynchronous transcription by request id.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#get-stt-v1-async-transctips-rid
+    action_class: read
+  - name: get_transcription_file
+    description: Fetch a completed transcription rendered as a subtitle or text file.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#get-stt-v1-async-transctips-rid-format
+    action_class: read
+  - name: summarize_dialogue
+    description: Summarize a short conversational text.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-nlp-v1-sync-summaries
+    action_class: acting
+  - name: request_meeting_minutes
+    description: Request asynchronous meeting minutes from a dialogue and receive a request id.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-nlp-v1-async-minutes
+    action_class: acting
+  - name: get_meeting_minutes
+    description: Fetch generated meeting minutes by request id.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#get-nlp-v1-async-minutes-rid
+    action_class: read
+  - name: split_paragraphs
+    description: Split a block of text into paragraphs.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-nlp-v1-sync-paragraphs
+    action_class: acting
+  - name: synthesize_speech
+    description: Synthesize short speech from text and return a WAV file.
+    source_operation: openapi/actionpower-daglo-cloud-api-openapi.yml#post-tts-v1-sync-audios
+    action_class: acting
+not_covered:
+  - surface: realtime streaming STT
+    reason: >-
+      Bidirectional gRPC streaming (grpc/actionpower-speech.proto) has no request/response shape MCP
+      tools can express, and the surface is permission-gated anyway.
+  - surface: chat completion, image and video operations
+    reason: >-
+      Present only in the dev-environment document (openapi/actionpower-daglo-cloud-api-dev-openapi.yml),
+      not in the production contract, so they are deliberately excluded from this candidate list.

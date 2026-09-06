@@ -1,0 +1,31 @@
+generated: '2026-09-06'
+method: searched
+source: https://developers.daglo.ai/guide/en/ ("Update History" / "업데이트 이력" block at the foot of every guide page)
+scheme: date-stamped document version (YYYYMMDD verN.N)
+current_version: '1.0'
+current_version_date: '2024-09-02'
+dedicated_changelog_page: false
+entries_count: 1
+note: >-
+  ActionPower publishes no dedicated API changelog, release-notes page or RSS feed. The only dated
+  version history on the developer surface is a one-line "Update History" block repeated at the foot of
+  each guide page, and every page still carries the same single entry from 2024-09-02 — so the documented
+  API has recorded no change in two years, while the contract itself has moved (the dev document now
+  carries chat-completion, image and video operations the production document does not). Recorded here as
+  the thin thing it is rather than omitted, and the ChangeLog pointer in apis.yml points at this file, not
+  at a page the provider does not have.
+entries:
+  - version: '1.0'
+    date: '2024-09-02'
+    scope: all guide pages (STT sync/async, realtime, chat completion, minutes summary, TTS, polling and callback, FAQ)
+    breaking: false
+    additions: ['API 문서가 작성되었습니다. — "API document has been created."']
+    source: https://developers.daglo.ai/guide/en/STT-Async.html
+adjacent_surfaces:
+  - name: daglo product blog (application changes, not API changes)
+    url: https://daglo.ai/d/ko/blog
+    rss: https://daglo.ai/d/ko/blog/rss.xml
+    note: >-
+      Dated posts announce product features and, occasionally, incidents (e.g. a YouTube transcription
+      outage). It covers the daglo application, not the Cloud API contract, so it is recorded as adjacent
+      rather than as the API changelog.

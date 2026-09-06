@@ -1,0 +1,82 @@
+generated: '2026-09-06'
+method: derived
+source: >-
+  openapi/actionpower-daglo-cloud-api-openapi.yml, grpc/actionpower-speech.proto,
+  https://daglo.ai/d/en/enterprise, https://developers.daglo.ai/guide/en/
+standards:
+  - id: openapi-3.0
+    conforms: true
+    evidence: 'openapi: 3.0.0 served at https://apis.daglo.ai/openapi.prod.yaml and rendered at https://apis.daglo.ai/docs'
+  - id: grpc-protobuf3
+    conforms: true
+    evidence: >-
+      Published proto3 service definition (package dagloapis.speech.v1, rpc StreamingRecognize,
+      bidirectional streaming) at https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html —
+      saved verbatim to grpc/actionpower-speech.proto
+  - id: http-bearer-auth
+    conforms: true
+    evidence: 'components.securitySchemes.BearerAuth: {type: http, scheme: bearer}, applied globally via root security'
+  - id: bcp47-language-tags
+    conforms: true
+    evidence: >-
+      RecognitionConfig.language_code cites RFC BCP 47 explicitly in the proto; the REST sttConfig.language
+      enum uses BCP 47 tags (ko-KR, en-US, ja-JP, cmn-Hans-CN, de-DE, fr-FR, es-ES, it-IT, nl-NL, sv-SE,
+      hi-IN, ru-RU, vi-VN, th-TH, id-ID, fa-IR, cs-CZ) plus a non-standard "mixed" value for Korean/English
+      code-switching
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'errors return application/json {"error": "<string>"}, not application/problem+json'
+  - id: oauth2
+    conforms: false
+    evidence: no oauth2 securityScheme in either contract; authentication is a static account-wide bearer token
+  - id: openid-connect
+    conforms: false
+    evidence: no /.well-known/openid-configuration on any host (see well-known/actionpower-well-known.yml)
+  - id: rfc8594-sunset-header
+    conforms: false
+    evidence: no Sunset or Deprecation header support documented; see lifecycle/actionpower-lifecycle.yml
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404 on every host probed 2026-09-06
+  - id: idempotency-key
+    conforms: false
+    evidence: no idempotency mechanism in either contract; see conventions/actionpower-conventions.yml
+  - id: asyncapi
+    conforms: false
+    evidence: >-
+      An event surface exists (job callbacks, gRPC streams) but no AsyncAPI document is published.
+      Captured instead as a webhook catalog in asyncapi/actionpower-daglo-webhooks.yml
+  - id: json-api
+    conforms: false
+    evidence: bespoke JSON envelopes, no JSON:API media type
+domain_standard:
+  assessed: true
+  found: false
+  note: >-
+    Speech recognition and speech synthesis have no interchange standard the contract could declare —
+    there is no SCIM/OData/HL7/OpenRTB analogue for an STT payload, and the nearest thing to a shared
+    shape in this market is Google Cloud Speech's de-facto request/response vocabulary. ActionPower's
+    proto is visibly modelled on it (StreamingRecognize, RecognitionConfig, interim_results, is_final,
+    StreamingRecognitionResult), which is a real portability benefit for a caller migrating from Google
+    STT, but a vendor's API shape is not a standard and is not recorded as a conformance. Reward-only
+    dimension, so nothing is invented to fill it.
+compliance:
+  published: true
+  certifications:
+    - name: ISO/IEC 27001
+      claimed_at: https://daglo.ai/d/en/enterprise
+      claim: 'ISO 27001 certified.'
+      certificate_published: false
+      note: >-
+        The certification is asserted in prose on the enterprise page and repeated in the company's own
+        llms.txt. No certificate number, issuing body, scope statement or audit date is published, and
+        there is no trust centre, no SOC 2 report request flow and no compliance portal — trust.daglo.ai
+        does not resolve. Recorded as a published claim, not as verified evidence.
+  controls_published:
+    - SAML single sign-on
+    - Role-based access control (RBAC)
+    - Exportable activity/audit log
+    - AES-256 encryption at rest and in transit
+    - Fully on-premise / closed-network deployment option
+    - Private LLM in customer environment
+  source: https://daglo.ai/d/en/enterprise

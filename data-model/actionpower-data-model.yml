@@ -1,0 +1,81 @@
+generated: '2026-09-06'
+method: derived
+source: openapi/actionpower-daglo-cloud-api-openapi.yml, grpc/actionpower-speech.proto
+note: >-
+  The contract defines no components.schemas at all — every request and response schema is inlined at the
+  operation. The graph below is derived from those inline shapes and from the rid handle that ties the
+  asynchronous operations together. There is no persistent, addressable resource model here: the only
+  server-side entity a caller can name is a job, identified by its rid, and there is no list, update or
+  delete operation for one.
+entities:
+  - name: TranscriptionJob
+    id_field: rid
+    id_format: UUID string
+    created_by: [post-stt-v1-async-transcripts]
+    read_by: [get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format]
+    lifecycle_field: status
+    fields: [rid, fileName, status, progress, sttResults, custom]
+    note: Also created transiently by post-stt-v1-sync-transcripts, which returns the result inline and issues no durable rid.
+  - name: SttResult
+    parent: TranscriptionJob
+    fields: [transcript, words, keywords, speaker, sentiment]
+  - name: Word
+    parent: SttResult
+    fields: [word, startTime, endTime, speaker]
+    note: >-
+      startTime/endTime are protobuf-Duration-shaped objects ({seconds, nanos}) rather than floats — a
+      Google-STT-shaped detail carried into the REST surface. The guide's example responses also show a
+      segmentId on each word; that field appears in the published examples but not in the OpenAPI schema.
+  - name: MinutesJob
+    id_field: rid
+    created_by: [post-nlp-v1-async-minutes]
+    read_by: [get-nlp-v1-async-minutes-rid]
+    lifecycle_field: status
+  - name: SummaryResult
+    created_by: [post-nlp-v1-sync-summaries]
+    persistent: false
+  - name: ParagraphResult
+    created_by: [post-nlp-v1-sync-paragraphs]
+    persistent: false
+  - name: SynthesizedAudio
+    created_by: [post-tts-v1-sync-audios]
+    persistent: false
+    media_type: audio/wav
+  - name: SttConfig
+    kind: value object
+    embedded_in: [TranscriptionJob request]
+    fields: [model, language, keywordBoost, multiChannel, speakerDiarization]
+  - name: NlpConfig
+    kind: value object
+    embedded_in: [TranscriptionJob request]
+    fields: [sentimentAnalysis, keywordExtraction, summary]
+  - name: Callback
+    kind: value object
+    embedded_in: [TranscriptionJob request, MinutesJob request]
+    fields: [url, headers]
+  - name: StreamingSession
+    kind: transient
+    contract: grpc/actionpower-speech.proto
+    fields: [language_code, interim_results, max_silence_ms]
+    emits: [StreamingRecognitionResult]
+    note: gRPC only; no rid, no persistence, nothing to poll.
+relationships:
+  - {from: TranscriptionJob, to: SttResult, kind: has_many, via: sttResults}
+  - {from: SttResult, to: Word, kind: has_many, via: words}
+  - {from: TranscriptionJob, to: SttConfig, kind: has_one, via: sttConfig}
+  - {from: TranscriptionJob, to: NlpConfig, kind: has_one, via: nlpConfig}
+  - {from: TranscriptionJob, to: Callback, kind: has_one, via: callback}
+  - {from: MinutesJob, to: Callback, kind: has_one, via: callback}
+  - {from: StreamingSession, to: StreamingRecognitionResult, kind: has_many, via: response stream}
+identifiers:
+  - name: rid
+    format: UUID
+    prefix: none
+    scope: account
+    note: >-
+      No type prefix, so a transcription rid and a minutes rid are indistinguishable by inspection —
+      the caller must remember which endpoint issued it, because polling the wrong one returns 404.
+gaps:
+  - components.schemas is empty; every schema is inline, so nothing is reusable by $ref and a generator emits duplicate types per operation.
+  - No collection, update or delete operations exist for any entity, so a caller cannot enumerate or remove past jobs through the API.
+  - Retention of transcripts and uploaded media on the provider side is not stated in the contract.

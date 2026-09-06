@@ -1,0 +1,86 @@
+generated: '2026-09-06'
+method: derived
+source: >-
+  openapi/actionpower-daglo-cloud-api-openapi.yml (every 4xx/5xx response across all 9 operations),
+  enriched from the response-code tables published at
+  https://developers.daglo.ai/guide/en/STT-Async.html and https://developers.daglo.ai/guide/Language-chat-completion.html
+format: bespoke-json
+rfc9457: false
+envelope:
+  content_type: application/json
+  shape: '{"error": "<message string>"}'
+  schema_description: 에러 발생 시 응답입니다. (the response when an error occurs)
+  note: >-
+    A single free-text `error` string. There is no machine-readable error code, no type URI, no
+    problem+json media type and no per-error documentation link anywhere in the contract, so an agent
+    can only branch on the HTTP status. The 204 and 202 responses carry no body at all and are easy to
+    mistake for failures: 204 means the job succeeded but produced an empty transcript, and 202 on the
+    subtitle-file endpoint means the job is still running.
+problems:
+  - status: 400
+    title: Bad Request
+    detail: 요청 형식이 잘못 되었습니다. — the request shape is invalid.
+    remediation: Check the request body against the operation schema; JSON and multipart bodies are not interchangeable.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 401
+    title: Unauthorized
+    detail: Missing or invalid bearer token.
+    remediation: >-
+      Issue a fresh token from the Token menu of the daglo Developers console and send it in the
+      Authorization header as a bearer token.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, get-nlp-v1-async-minutes-rid, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 403
+    title: Forbidden
+    detail: 허용되지 않은 접근입니다. — the token is valid but the account is not permitted to call this surface.
+    remediation: >-
+      Two distinct causes are documented and both return 403: free test credits exhausted (register a
+      card or arrange a prepaid contract), or calling a surface that needs an extra grant — realtime
+      streaming STT is only enabled for accounts approved by api-support@daglo.ai.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, get-nlp-v1-async-minutes-rid, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 404
+    title: Not Found
+    detail: The request id (rid) is unknown.
+    remediation: Use the rid returned by the matching POST; rids are not guessable.
+    source_operations: [get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format, get-nlp-v1-async-minutes-rid]
+  - status: 413
+    title: Payload Too Large
+    detail: 요청이 너무 큽니다. — the uploaded media exceeds the published limits.
+    remediation: Async STT accepts up to 2GB and 4 hours; sync STT accepts up to 30 seconds of audio.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 415
+    title: Unsupported Media Type
+    detail: The container or encoding is not one of the published audio/video formats.
+    remediation: >-
+      Re-encode to one of the listed formats; the docs warn that a matching file extension is not
+      enough — the actual encoding must be supported.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 429
+    title: Too Many Requests
+    detail: The per-endpoint limit of 20 requests/sec was exceeded.
+    remediation: >-
+      Back off and retry. No Retry-After or RateLimit-* header is documented, so the retry interval has
+      to be chosen blind. Sustained over-limit traffic is treated as abuse and may be blocked outright.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, get-nlp-v1-async-minutes-rid, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 500
+    title: Internal Server Error
+    detail: 서버 오류입니다.
+    remediation: Retry; if it persists contact api-support@daglo.ai.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid, get-stt-v1-async-transctips-rid-format, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, get-nlp-v1-async-minutes-rid, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+  - status: 503
+    title: Service Unavailable
+    detail: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. — the service is temporarily saturated.
+    remediation: Wait and retry.
+    source_operations: [post-stt-v1-sync-transcripts, post-stt-v1-async-transcripts, get-stt-v1-async-transctips-rid-format, post-nlp-v1-sync-summaries, post-nlp-v1-async-minutes, post-nlp-v1-sync-paragraphs, post-tts-v1-sync-audios]
+job_states:
+  note: >-
+    Asynchronous failures do NOT surface as HTTP errors. A 200 on the polling GET carries a `status`
+    field, and two of its values are terminal failures an agent must handle explicitly.
+  states:
+    - {status: ai_requested, terminal: false, meaning: request accepted}
+    - {status: uploaded, terminal: false, meaning: file upload complete}
+    - {status: file_processing, terminal: false, meaning: pre-processing the file}
+    - {status: transcribing, terminal: false, meaning: transcription in progress}
+    - {status: post_processing, terminal: false, meaning: post-processing}
+    - {status: transcribed, terminal: true, meaning: success}
+    - {status: transcript_error, terminal: true, meaning: transcription failed — wait and re-submit}
+    - {status: file_error, terminal: true, meaning: the file itself is bad — fix the file and re-submit}

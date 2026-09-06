@@ -1,0 +1,54 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://apis.daglo.ai/openapi.prod.yaml (info.description, "API Rate Limits" section) and
+  https://developers.daglo.ai/guide/en/STT-Async.html
+limit_count: 1
+limits:
+  - scope: per-endpoint
+    window: 1 second
+    limit: 20
+    unit: requests
+    burst: null
+    applies_to: every API endpoint
+    exhaustion_status: 429
+    published_text: >-
+      '각 API Endpoint 별 20 requests/sec 의 Rate Limit이 적용됩니다.' — a rate limit of 20 requests/sec
+      applies per API endpoint.
+    enforcement_note: >-
+      The contract adds that repeated, sustained over-limit traffic is treated as abnormal use and the
+      requests may be blocked outright — so 429 is not necessarily the worst outcome of ignoring it.
+    source: https://apis.daglo.ai/openapi.prod.yaml
+response_headers:
+  documented: false
+  ratelimit_headers: []
+  retry_after: false
+  note: >-
+    No RateLimit-*, X-RateLimit-* or Retry-After header appears in any response definition in either
+    OpenAPI document, and none is described in the guide. An agent gets no runtime budget signal at all:
+    it cannot see how much of the 20/sec allowance it has used, and on a 429 it has no server-supplied
+    interval to wait, so back-off has to be guessed. This is the single clearest agent-readiness gap in
+    an otherwise tidy contract.
+  probe_note: >-
+    Not probed against a live 429 — provoking one would require an authenticated token and deliberately
+    exceeding a production limit, which this pipeline does not do.
+related_capacity_limits:
+  - subject: async STT upload
+    limit: 2GB file size, 4 hours duration
+    source: https://developers.daglo.ai/guide/en/STT-Async.html
+  - subject: sync STT upload
+    limit: 30 seconds of audio
+    source: https://developers.daglo.ai/guide/en/FAQ.html
+  - subject: realtime gRPC stream
+    limit: 6 hours per request stream
+    source: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
+  - subject: realtime gRPC audio format
+    limit: LINEAR16, 16000 Hz, mono (1 channel) only
+    source: grpc/actionpower-speech.proto
+  - subject: multi-channel STT
+    limit: at most 2 channels
+    source: openapi/actionpower-daglo-cloud-api-openapi.yml
+quota_exhaustion:
+  behaviour: >-
+    Separate from the rate limit: when an account's credits run out the request is interrupted rather
+    than throttled, and returns 403 rather than 429. See sandbox/actionpower-sandbox.yml.

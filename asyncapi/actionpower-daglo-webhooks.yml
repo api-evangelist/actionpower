@@ -1,0 +1,79 @@
+generated: '2026-09-06'
+method: searched
+source: >-
+  https://developers.daglo.ai/guide/Polling-and-Callback.html and the `callback` request-body object in
+  openapi/actionpower-daglo-cloud-api-openapi.yml
+spec_type: Webhooks
+asyncapi_published: false
+asyncapi_note: >-
+  ActionPower publishes no AsyncAPI document. /asyncapi.yaml, /asyncapi.json and an event-catalog page
+  were not found on any host (see well-known/actionpower-well-known.yml), and the GitHub organization
+  contains no event schema. The event surface below is real and documented in prose + the OpenAPI request
+  schema; it is captured as a webhook catalog rather than fabricated into an AsyncAPI document.
+surfaces:
+  - kind: http-callback
+    name: async job callback
+    direction: provider -> subscriber
+    transport: HTTPS POST
+  - kind: grpc-stream
+    name: StreamingRecognize
+    direction: bidirectional
+    transport: gRPC bidirectional streaming over TLS
+    contract: grpc/actionpower-speech.proto
+    note: >-
+      A real streaming event surface, but it is an RPC stream rather than a subscribable event channel —
+      the caller opens it, and it lives only for the duration of the request (up to 6 hours).
+subscription:
+  model: per-request, in-band
+  mechanism: >-
+    There is no webhook registration console, no endpoint-management API and no event-type selection.
+    A subscriber URL is supplied inside each individual job request body as `callback: {url, headers}`,
+    so the subscription lives and dies with that one job.
+  fields:
+    - name: callback.url
+      required_for_callback: true
+      description: http(s) URL the provider POSTs progress and results to
+    - name: callback.headers
+      required_for_callback: false
+      description: caller-supplied headers to include on the outbound POST
+    - name: callbackUrl
+      deprecated: true
+      description: superseded by callback.url; still present in the contract and explicitly marked DEPRECATED
+events:
+  - name: job.progress
+    trigger: while an asynchronous job is being processed
+    delivery: POST to callback.url
+    content_type: application/json
+    payload: the same body shape the polling GET returns, carrying the `status` field
+    statuses: [ai_requested, uploaded, file_processing, transcribing, post_processing]
+  - name: job.completed
+    trigger: an asynchronous job finished successfully
+    delivery: POST to callback.url
+    content_type: application/json
+    payload: '{"rid": "...", "status": "transcribed", "sttResults": [...]}'
+  - name: job.failed
+    trigger: an asynchronous job ended in an error state
+    delivery: POST to callback.url
+    content_type: application/json
+    payload: the polling body with status transcript_error (transcription failed) or file_error (bad input file)
+producing_operations:
+  - post-stt-v1-async-transcripts
+  - post-nlp-v1-async-minutes
+security:
+  signature: none
+  hmac: false
+  shared_secret: false
+  mtls: false
+  replay_protection: false
+  note: >-
+    The provider defines no way for a receiver to verify that an inbound callback actually came from
+    ActionPower. The only authentication available is whatever static headers the caller itself put in
+    callback.headers, which is a bearer secret the receiver chose, not a signature over the payload.
+    Any party who learns a callback URL can forge a completion event.
+delivery_semantics:
+  retries: not documented
+  ordering: not documented
+  at_least_once: not documented
+  note: >-
+    Retry behaviour, timeout and ordering guarantees are all unstated, which is why the provider's own
+    guide presents polling as the equal alternative rather than the fallback.

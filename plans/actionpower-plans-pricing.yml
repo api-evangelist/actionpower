@@ -1,0 +1,98 @@
+generated: '2026-09-06'
+method: searched
+source: https://developers.daglo.ai/pricing
+source_note: >-
+  The developer pricing page is client-rendered (a Vite/React SPA), so the plan cards and the unit price
+  table were read from the page's own application bundle
+  (https://developers.daglo.ai/assets/main-lsdYgRs7.js), which is what that URL renders in a browser.
+  Values are transcribed exactly as the provider publishes them; nothing is converted or inferred beyond
+  the provider's own KRW/USD switch.
+currency: KRW
+currency_note: >-
+  The page prices in KRW and renders a USD view by dividing by a fixed 1,300 KRW/USD rate in the client.
+  KRW figures are the published ones; USD figures below are the provider's own computed values.
+tax_note: 부가세 별도 — VAT excluded.
+billing_note: >-
+  최소 결제요금은 100원이며, 소수점 이하는 절사합니다. — minimum charge ₩100, fractions truncated. Invoice
+  totals are aggregated monthly and rounded up; the console dashboard can lag real-time cost by up to 24
+  hours.
+plan_count: 3
+plans:
+  - name: Free
+    label_en: Individual
+    label_ko: 무료
+    price: 0
+    currency: KRW
+    billing_period: null
+    included_quota: >-
+      Credits granted on signup, described in the FAQ as enough for about 10 hours of asynchronous
+      speech recognition.
+    overage: >-
+      None — requests are interrupted once the free credits are spent; the account must add a card or
+      sign a prepaid contract to continue.
+    limits: [All Audio and Language features available]
+    audience: developers and teams testing a prototype or evaluating adoption
+    signup: https://developers.daglo.ai/sign-in
+  - name: Pay as you go
+    label_en: Enterprise
+    label_ko: 빌링
+    price: null
+    price_model: metered — see unit_pricing below
+    currency: KRW
+    billing_period: monthly (invoiced, aggregated)
+    included_quota: none
+    overage: n/a — every unit is metered
+    limits: [All Audio and Language features available, 'Unlimited Access (무제한 요청 가능)']
+    payment_methods: [registered card, prepaid contract via api-support@daglo.ai]
+    audience: teams and companies putting speech AI into their own product
+  - name: Custom
+    label_ko: 커스텀
+    price: null
+    price_model: contact sales
+    currency: null
+    billing_period: null
+    included_quota: null
+    overage: null
+    limits: [Custom model support (커스텀 모델 지원), Dedicated technical support (전담 기술 지원)]
+    audience: teams and companies deploying AI into large-scale proprietary solutions
+    contact: https://developers.daglo.ai/#contact-us
+unit_pricing:
+  headline: 'Start as low as $0.00033/sec for speech-to-text'
+  audio:
+    - api: Sync STT
+      unit: per minute
+      list_price_krw: 30
+      current_price_krw: 10
+    - api: Async STT
+      unit: per minute
+      list_price_krw: 20
+      current_price_krw: 10
+    - api: Stream STT
+      unit: per minute
+      list_price_krw: 30
+      current_price_krw: 10
+  language:
+    - api: Chat Completion
+      unit: per 1M tokens
+      list_price_krw: 30000
+      current_price_krw: 30
+      note: >-
+        Transcribed exactly as published. The struck-through list price (₩30,000 / 1M tokens) and the
+        promotional price (₩30 / 1M tokens) differ by three orders of magnitude, which is a far larger
+        gap than the 2-3x discount shown on every other row; a buyer should confirm this figure in the
+        console before budgeting against it.
+    - api: Minutes Summary
+      unit: per call
+      list_price_krw: 90
+      current_price_krw: 90
+    - api: TTS
+      unit: per 1,000 characters
+      list_price_krw: 15
+      current_price_krw: 15
+enterprise:
+  on_premise: true
+  model: rental programme — dedicated server with the daglo web app, STT engine and optional private LLM
+  tiers: monthly tiers by user count — Team, Business, Enterprise
+  extras_at_additional_cost: [SSO integration, engine fine-tuning on customer data]
+  price_published: false
+  source: https://daglo.ai/d/en/enterprise
