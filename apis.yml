@@ -20,8 +20,8 @@ modified: '2026-09-06'
 position: Producing
 tags:
   - Speech Recognition
-  - Speech To Text
-  - Text To Speech
+  - Speech-to-Text
+  - Text-to-Speech
   - Natural Language Processing
   - Artificial Intelligence
   - Transcription
@@ -41,69 +41,167 @@ tags_raw:
   - grpc
   - south-korea
 apis:
-  - name: daglo Cloud API
-    description: >-
-      REST API for ActionPower's speech and language stack, served at https://apis.daglo.ai and authenticated with a
-      bearer API token issued from the daglo Developers console. The published production contract covers synchronous
-      and asynchronous speech-to-text (with speaker diarization, keyword boosting, multi-channel audio, sentiment
-      analysis and subtitle-file export), dialogue summarization, asynchronous meeting minutes, paragraph splitting
-      and text-to-speech. Long-running jobs return a request id (rid) that is either polled with GET or delivered to a
-      caller-supplied callback URL.
-    humanURL: https://developers.daglo.ai/guide/en/
-    baseURL: https://apis.daglo.ai
-    image: https://daglo.ai/d/og-image
-    tags:
-      - Speech Recognition
-      - Speech To Text
-      - Text To Speech
-      - Natural Language Processing
-      - Transcription
-    properties:
-      - type: OpenAPI
-        url: openapi/actionpower-daglo-cloud-api-openapi.yml
-      - type: OpenAPI
-        url: openapi/actionpower-daglo-cloud-api-dev-openapi.yml
-      - type: Documentation
-        url: https://developers.daglo.ai/guide/en/
-      - type: APIReference
-        url: https://apis.daglo.ai/docs
-      - type: GettingStarted
-        url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
-      - type: Webhooks
-        url: asyncapi/actionpower-daglo-webhooks.yml
-      - type: Authentication
-        url: authentication/actionpower-authentication.yml
-      - type: RateLimits
-        url: rate-limits/actionpower-rate-limits.yml
-      - type: ErrorCatalog
-        url: errors/actionpower-problem-types.yml
-      - type: Examples
-        url: examples/actionpower-daglo-examples.yml
-      - type: DataModel
-        url: data-model/actionpower-data-model.yml
-      - type: Overlay
-        url: overlays/actionpower-daglo-cloud-api-overlay.yaml
-  - name: daglo Realtime Streaming STT (gRPC)
-    description: >-
-      Bidirectional gRPC streaming speech recognition served from apis.daglo.ai. The provider publishes the proto3
-      service definition (package dagloapis.speech.v1, rpc StreamingRecognize) in its developer guide; clients stream
-      LINEAR16 16kHz mono audio and receive interim and final transcripts. Language codes ko-KR, en-US and mixed are
-      supported, a single request stream may run up to six hours, and access requires an additional permission granted
-      by api-support@daglo.ai.
-    humanURL: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
-    baseURL: https://apis.daglo.ai
-    image: https://daglo.ai/d/og-image
-    tags:
-      - Speech Recognition
-      - Streaming
-      - gRPC
-    properties:
-      - type: Protobuf
-        url: grpc/actionpower-speech.proto
-      - type: Documentation
-        url: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
-      - type: SourceCode
-        url: https://github.com/actionpower/dagloapi-js-beta
+- name: daglo Realtime Streaming STT (gRPC)
+  description: >-
+    Bidirectional gRPC streaming speech recognition served from apis.daglo.ai. The provider publishes
+    the proto3 service definition (package dagloapis.speech.v1, rpc StreamingRecognize) in its developer
+    guide; clients stream LINEAR16 16kHz mono audio and receive interim and final transcripts. Language
+    codes ko-KR, en-US and mixed are supported, a single request stream may run up to six hours, and access
+    requires an additional permission granted by api-support@daglo.ai.
+  humanURL: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
+  baseURL: https://apis.daglo.ai
+  image: https://daglo.ai/d/og-image
+  tags:
+  - Speech Recognition
+  - Streaming
+  - gRPC
+  properties:
+  - type: Protobuf
+    url: grpc/actionpower-speech.proto
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/Quick-Realtime-Voice-To-Text.html
+  - type: SourceCode
+    url: https://github.com/actionpower/dagloapi-js-beta
+- aid: actionpower:actionpower-image-api
+  name: Actionpower Image API
+  description: The Image API from Actionpower — 7 operation(s) for image.
+  humanURL: https://developers.daglo.ai/guide/en/
+  baseURL: https://apis.daglo.ai
+  tags:
+  - Image
+  properties:
+  - type: OpenAPI
+    url: openapi/actionpower-image-api-openapi.yml
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/en/
+  - type: APIReference
+    url: https://apis.daglo.ai/docs
+  - type: GettingStarted
+    url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+  - type: Webhooks
+    url: asyncapi/actionpower-daglo-webhooks.yml
+  - type: Authentication
+    url: authentication/actionpower-authentication.yml
+  - type: RateLimits
+    url: rate-limits/actionpower-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/actionpower-problem-types.yml
+  - type: Examples
+    url: examples/actionpower-daglo-examples.yml
+  - type: DataModel
+    url: data-model/actionpower-data-model.yml
+- aid: actionpower:actionpower-nlp-api
+  name: Actionpower NLP API
+  description: The NLP API from Actionpower — 7 operation(s) for nlp.
+  humanURL: https://developers.daglo.ai/guide/en/
+  baseURL: https://apis.daglo.ai
+  tags:
+  - NLP
+  properties:
+  - type: OpenAPI
+    url: openapi/actionpower-nlp-api-openapi.yml
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/en/
+  - type: APIReference
+    url: https://apis.daglo.ai/docs
+  - type: GettingStarted
+    url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+  - type: Webhooks
+    url: asyncapi/actionpower-daglo-webhooks.yml
+  - type: Authentication
+    url: authentication/actionpower-authentication.yml
+  - type: RateLimits
+    url: rate-limits/actionpower-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/actionpower-problem-types.yml
+  - type: Examples
+    url: examples/actionpower-daglo-examples.yml
+  - type: DataModel
+    url: data-model/actionpower-data-model.yml
+- aid: actionpower:actionpower-stt-api
+  name: Actionpower STT API
+  description: The STT API from Actionpower — 5 operation(s) for stt.
+  humanURL: https://developers.daglo.ai/guide/en/
+  baseURL: https://apis.daglo.ai
+  tags:
+  - STT
+  properties:
+  - type: OpenAPI
+    url: openapi/actionpower-stt-api-openapi.yml
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/en/
+  - type: APIReference
+    url: https://apis.daglo.ai/docs
+  - type: GettingStarted
+    url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+  - type: Webhooks
+    url: asyncapi/actionpower-daglo-webhooks.yml
+  - type: Authentication
+    url: authentication/actionpower-authentication.yml
+  - type: RateLimits
+    url: rate-limits/actionpower-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/actionpower-problem-types.yml
+  - type: Examples
+    url: examples/actionpower-daglo-examples.yml
+  - type: DataModel
+    url: data-model/actionpower-data-model.yml
+- aid: actionpower:actionpower-tts-api
+  name: Actionpower TTS API
+  description: The TTS API from Actionpower — 1 operation(s) for tts.
+  humanURL: https://developers.daglo.ai/guide/en/
+  baseURL: https://apis.daglo.ai
+  tags:
+  - TTS
+  properties:
+  - type: OpenAPI
+    url: openapi/actionpower-tts-api-openapi.yml
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/en/
+  - type: APIReference
+    url: https://apis.daglo.ai/docs
+  - type: GettingStarted
+    url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+  - type: Webhooks
+    url: asyncapi/actionpower-daglo-webhooks.yml
+  - type: Authentication
+    url: authentication/actionpower-authentication.yml
+  - type: RateLimits
+    url: rate-limits/actionpower-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/actionpower-problem-types.yml
+  - type: Examples
+    url: examples/actionpower-daglo-examples.yml
+  - type: DataModel
+    url: data-model/actionpower-data-model.yml
+- aid: actionpower:actionpower-video-api
+  name: Actionpower Video API
+  description: The Video API from Actionpower — 10 operation(s) for video.
+  humanURL: https://developers.daglo.ai/guide/en/
+  baseURL: https://apis.daglo.ai
+  tags:
+  - Video
+  properties:
+  - type: OpenAPI
+    url: openapi/actionpower-video-api-openapi.yml
+  - type: Documentation
+    url: https://developers.daglo.ai/guide/en/
+  - type: APIReference
+    url: https://apis.daglo.ai/docs
+  - type: GettingStarted
+    url: https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html
+  - type: Webhooks
+    url: asyncapi/actionpower-daglo-webhooks.yml
+  - type: Authentication
+    url: authentication/actionpower-authentication.yml
+  - type: RateLimits
+    url: rate-limits/actionpower-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/actionpower-problem-types.yml
+  - type: Examples
+    url: examples/actionpower-daglo-examples.yml
+  - type: DataModel
+    url: data-model/actionpower-data-model.yml
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com

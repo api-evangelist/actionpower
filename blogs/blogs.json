@@ -1,0 +1,21 @@
+{
+  "repo": "actionpower",
+  "feeds": [
+    {
+      "source": "https://daglo.ai/d/ko/blog",
+      "feed_url": "https://daglo.ai/d/ko/blog",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    },
+    {
+      "source": "https://developers.daglo.ai/guide/en/FAQ.html",
+      "feed_url": "https://developers.daglo.ai/guide/en/FAQ.html",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-09-13T13:00:00Z"
+}
