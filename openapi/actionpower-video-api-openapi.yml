@@ -1,0 +1,1981 @@
+openapi: 3.2.0
+info:
+  title: Cloud API 문서 Video API
+  version: '1.0'
+  description: 'API를 서비스를 사용하기 위해서는 JWT 토큰이 필요합니다.
+
+
+    ## API Rate Limits
+
+
+    각 API Endpoint 별 20 requests/sec 의 Rate Limit이 적용됩니다.
+
+
+    이 허용치를 초과하는 요청량에 대해서는 HTTP 429 Too Many Request Error 응답이 나갈 수 있으며,
+
+
+    반복, 지속적으로 요청량을 초과하게 되는 경우, 비정상적인 이용으로 간주되어 요청이 차단될 수 있습니다.'
+  contact:
+    name: Customer Service
+    email: cs@daglo.ai
+  termsOfService: https://daglo.ai/terms
+  license:
+    url: https://daglo.ai/license
+    name: License
+security:
+- BearerAuth: []
+tags:
+- name: Video
+paths:
+  /video/v1/async/annotate/scenes:
+    x-permission: video-async-annotate-scene
+    post:
+      x-descriptors:
+      - default: annotate-scene
+      x-wait-for-response: false
+      summary: Annotate Scenes in Video
+      description: 비디오를 장면으로 나눠 각 장면에 대한 설명을 덧붙입니다.
+      tags:
+      - Video
+      operationId: post-video-v1-async-annotate-scenes
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: object
+                  description: '비디오 프로세싱을 요청할 비디오에 대한 설정입니다.
+
+
+                    기본적으로 `ffmpeg` 과 호환이 되어야 하며, 권장 사양은 아래와 같습니다.
+
+
+                    • `mp4`(`AVC1` 혹은 `H.264` 코덱), `FHD`, `720p`, `30FPS` 의 동영상
+
+
+                    • 3 시간 이하의 재생시간
+
+
+                    • 10GB 이하의 파일 크기'
+                  properties:
+                    source:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: 다운로드 가능한 비디오의 URL 입니다.
+                      required:
+                      - url
+                  required:
+                  - source
+                callback:
+                  type: object
+                  description: '비동기 요청의 진행 상태 및 결과를 콜백으로 전달 받고 싶을 때 사용합니다. '
+                  properties:
+                    url:
+                      type: string
+                      description: '콜백을 전송받을 http(s) 를 포함한 URL 입니다.
+
+
+                        처리 중에는 진행상태를, 처리가 완료 된 뒤에는 결과 혹은 오류 상태를 `POST` 방식으로 해당 URL에 전송합니다.'
+                    headers:
+                      type: object
+                      description: 콜백 URL로 전송할 때, 헤더에 포함시켜야 하는 값이 있다면 명시해줍니다.
+                  x-tags:
+                  - Common
+                custom:
+                  type: object
+                  description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                    사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                    요청을 자동화 하여 보낼 때 유용합니다.'
+                  example:
+                    app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  x-tags:
+                  - Common
+              required:
+              - video
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              example:
+                rid: 76543210-ba98-7654-3210-000000000001
+                custom:
+                  app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/annotate/scenes/{rid}:
+    x-permission: video-async-annotate-scene
+    get:
+      summary: Get Annotated Scenes Results
+      description: 비디오의 나뉘어진 장면에 대한 설명을 가져옵니다.
+      tags:
+      - Video
+      operationId: get-video-v1-async-annotate-scenes-rid
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 요청 ID 입니다.
+          example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+          x-tags:
+          - Common
+        description: Request ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  status:
+                    type: string
+                    description: '비디오 프로세싱의 상태값 입니다.
+
+
+                      `requested`: 요청이 시작되었습니다.
+
+
+                      `uploaded`: 파일 업로드가 완료되었습니다.
+
+
+                      `file_processing`: 파일을 전처리 중 입니다.
+
+
+                      `processing`: 요청 처리중 입니다.
+
+
+                      `processed`: 요청이 처리 완료되었습니다.
+
+
+                      `input_error`: 사용자 요청 값에 오류가 있습니다. 확인 후 다시 요청해 주세요.
+
+
+                      `file_error`: 파일에 오류가 있습니다. 파일 확인 후 다시 요청해 주세요.
+
+
+                      `processing_error`: 비디오 프로세싱 중 오류가 발생하였습니다. 잠시 기다렸다가 다시 요청해 주세요.'
+                    enum:
+                    - requested
+                    - uploaded
+                    - file_processing
+                    - processing
+                    - processed
+                    - input_error
+                    - file_error
+                    - processing_error
+                    example: processed
+                    x-tags:
+                    - Video
+                  progress:
+                    type: integer
+                    description: 비디오 프로세싱 진행률 입니다.
+                    minimum: 0
+                    maximum: 100
+                    example: 100
+                  scenes:
+                    type: array
+                    items:
+                      type: object
+                      description: 비디오의 장면에 대한 설명입니다.
+                      properties:
+                        texts:
+                          type: array
+                          description: 한 장면을 설명할 수 있는 키워드들이 반환됩니다.
+                          items:
+                            type: string
+                        segment:
+                          type: object
+                          description: 비디오의 구간에 대한 정보를 나타냅니다.
+                          properties:
+                            startTime:
+                              type: number
+                              format: float
+                              description: 구간이 시작하는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                            endTime:
+                              type: number
+                              format: float
+                              description: 구간이 끝나는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                  message:
+                    type: string
+                    description: 오류 메시지 등의 추가정보를 표시합니다.
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/annotate/texts:
+    x-permission: video-async-annotate-text
+    post:
+      x-descriptors:
+      - default: annotate-text
+      x-wait-for-response: false
+      summary: Recognize Texts in Video
+      description: 비디오에서 글자를 인식합니다.
+      tags:
+      - Video
+      operationId: post-video-v1-async-annotate-texts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: object
+                  description: '비디오 프로세싱을 요청할 비디오에 대한 설정입니다.
+
+
+                    기본적으로 `ffmpeg` 과 호환이 되어야 하며, 권장 사양은 아래와 같습니다.
+
+
+                    • `mp4`(`AVC1` 혹은 `H.264` 코덱), `FHD`, `720p`, `30FPS` 의 동영상
+
+
+                    • 3 시간 이하의 재생시간
+
+
+                    • 10GB 이하의 파일 크기'
+                  properties:
+                    source:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: 다운로드 가능한 비디오의 URL 입니다.
+                      required:
+                      - url
+                  required:
+                  - source
+                callback:
+                  type: object
+                  description: '비동기 요청의 진행 상태 및 결과를 콜백으로 전달 받고 싶을 때 사용합니다. '
+                  properties:
+                    url:
+                      type: string
+                      description: '콜백을 전송받을 http(s) 를 포함한 URL 입니다.
+
+
+                        처리 중에는 진행상태를, 처리가 완료 된 뒤에는 결과 혹은 오류 상태를 `POST` 방식으로 해당 URL에 전송합니다.'
+                    headers:
+                      type: object
+                      description: 콜백 URL로 전송할 때, 헤더에 포함시켜야 하는 값이 있다면 명시해줍니다.
+                  x-tags:
+                  - Common
+                custom:
+                  type: object
+                  description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                    사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                    요청을 자동화 하여 보낼 때 유용합니다.'
+                  example:
+                    app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  x-tags:
+                  - Common
+              required:
+              - video
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              example:
+                rid: 76543210-ba98-7654-3210-000000000001
+                custom:
+                  app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/annotate/texts/{rid}:
+    x-permission: video-async-annotate-text
+    get:
+      summary: Get Texts Results
+      description: 비디오에서 인식된 글자를 가져옵니다.
+      tags:
+      - Video
+      operationId: get-video-v1-async-annotate-texts-rid
+      parameters:
+      - name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 요청 ID 입니다.
+          example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+          x-tags:
+          - Common
+        description: Request ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  status:
+                    type: string
+                    description: '비디오 프로세싱의 상태값 입니다.
+
+
+                      `requested`: 요청이 시작되었습니다.
+
+
+                      `uploaded`: 파일 업로드가 완료되었습니다.
+
+
+                      `file_processing`: 파일을 전처리 중 입니다.
+
+
+                      `processing`: 요청 처리중 입니다.
+
+
+                      `processed`: 요청이 처리 완료되었습니다.
+
+
+                      `input_error`: 사용자 요청 값에 오류가 있습니다. 확인 후 다시 요청해 주세요.
+
+
+                      `file_error`: 파일에 오류가 있습니다. 파일 확인 후 다시 요청해 주세요.
+
+
+                      `processing_error`: 비디오 프로세싱 중 오류가 발생하였습니다. 잠시 기다렸다가 다시 요청해 주세요.'
+                    enum:
+                    - requested
+                    - uploaded
+                    - file_processing
+                    - processing
+                    - processed
+                    - input_error
+                    - file_error
+                    - processing_error
+                    example: processed
+                    x-tags:
+                    - Video
+                  progress:
+                    type: integer
+                    description: 비디오 프로세싱 진행률 입니다.
+                    minimum: 0
+                    maximum: 100
+                    example: 100
+                  texts:
+                    type: array
+                    items:
+                      type: object
+                      description: 비디오에서 인식된 글자에 대한 속성입니다.
+                      properties:
+                        texts:
+                          type: array
+                          description: 비디오에서 인식된 글자들의 모음입니다.
+                          items:
+                            type: string
+                        segment:
+                          type: object
+                          description: 비디오의 구간에 대한 정보를 나타냅니다.
+                          properties:
+                            startTime:
+                              type: number
+                              format: float
+                              description: 구간이 시작하는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                            endTime:
+                              type: number
+                              format: float
+                              description: 구간이 끝나는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                  message:
+                    type: string
+                    description: 오류 메시지 등의 추가정보를 표시합니다.
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/annotate/faces:
+    x-permission: video-async-annotate-face
+    post:
+      x-descriptors:
+      - default: annotate-face
+      x-wait-for-response: false
+      summary: Recognize Faces in Video
+      description: 비디오에서 인물을 인식합니다.
+      tags:
+      - Video
+      operationId: post-video-v1-async-annotate-faces
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: object
+                  description: '비디오 프로세싱을 요청할 비디오에 대한 설정입니다.
+
+
+                    기본적으로 `ffmpeg` 과 호환이 되어야 하며, 권장 사양은 아래와 같습니다.
+
+
+                    • `mp4`(`AVC1` 혹은 `H.264` 코덱), `FHD`, `720p`, `30FPS` 의 동영상
+
+
+                    • 3 시간 이하의 재생시간
+
+
+                    • 10GB 이하의 파일 크기'
+                  properties:
+                    source:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: 다운로드 가능한 비디오의 URL 입니다.
+                      required:
+                      - url
+                  required:
+                  - source
+                faceIds:
+                  description: 인식할 인물의 ID 값(복수 가능) 입니다. 사전에 인물 등록이 되어있어야 합니다.
+                  type: array
+                  items:
+                    type: string
+                callback:
+                  type: object
+                  description: '비동기 요청의 진행 상태 및 결과를 콜백으로 전달 받고 싶을 때 사용합니다. '
+                  properties:
+                    url:
+                      type: string
+                      description: '콜백을 전송받을 http(s) 를 포함한 URL 입니다.
+
+
+                        처리 중에는 진행상태를, 처리가 완료 된 뒤에는 결과 혹은 오류 상태를 `POST` 방식으로 해당 URL에 전송합니다.'
+                    headers:
+                      type: object
+                      description: 콜백 URL로 전송할 때, 헤더에 포함시켜야 하는 값이 있다면 명시해줍니다.
+                  x-tags:
+                  - Common
+                custom:
+                  type: object
+                  description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                    사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                    요청을 자동화 하여 보낼 때 유용합니다.'
+                  example:
+                    app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  x-tags:
+                  - Common
+              required:
+              - video
+              - faceIds
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              example:
+                rid: 76543210-ba98-7654-3210-000000000001
+                custom:
+                  app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/annotate/faces/{rid}:
+    x-permission: video-async-annotate-face
+    get:
+      summary: Get Annotated Faces Results
+      description: 비디오에서 인식된 인물에 대한 결과를 가져옵니다.
+      tags:
+      - Video
+      operationId: get-video-v1-async-annotate-faces-rid
+      parameters:
+      - example: 76543210-ba98-7654-3210-000000000001
+        name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 요청 ID 입니다.
+          example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+          x-tags:
+          - Common
+        description: Request ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  status:
+                    type: string
+                    description: '비디오 프로세싱의 상태값 입니다.
+
+
+                      `requested`: 요청이 시작되었습니다.
+
+
+                      `uploaded`: 파일 업로드가 완료되었습니다.
+
+
+                      `file_processing`: 파일을 전처리 중 입니다.
+
+
+                      `processing`: 요청 처리중 입니다.
+
+
+                      `processed`: 요청이 처리 완료되었습니다.
+
+
+                      `input_error`: 사용자 요청 값에 오류가 있습니다. 확인 후 다시 요청해 주세요.
+
+
+                      `file_error`: 파일에 오류가 있습니다. 파일 확인 후 다시 요청해 주세요.
+
+
+                      `processing_error`: 비디오 프로세싱 중 오류가 발생하였습니다. 잠시 기다렸다가 다시 요청해 주세요.'
+                    enum:
+                    - requested
+                    - uploaded
+                    - file_processing
+                    - processing
+                    - processed
+                    - input_error
+                    - file_error
+                    - processing_error
+                    example: processed
+                    x-tags:
+                    - Video
+                  progress:
+                    type: integer
+                    description: 비디오 프로세싱 진행률 입니다.
+                    minimum: 0
+                    maximum: 100
+                    example: 100
+                  faces:
+                    type: array
+                    items:
+                      type: object
+                      description: 비디오에서 인식된 인물에 대한 속성입니다.
+                      properties:
+                        faceId:
+                          type: string
+                          description: 비디오에서 인식된 인물의 ID입니다.
+                        segments:
+                          type: array
+                          items:
+                            type: object
+                            description: 비디오의 구간에 대한 정보를 나타냅니다.
+                            properties:
+                              startTime:
+                                type: number
+                                format: float
+                                description: 구간이 시작하는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                              endTime:
+                                type: number
+                                format: float
+                                description: 구간이 끝나는 시간입니다. 비디오의 시작을 기준으로 초 단위 시간입니다.
+                  message:
+                    type: string
+                    description: 오류 메시지 등의 추가정보를 표시합니다.
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              examples:
+                processed:
+                  summary: Processed Response Example
+                  value:
+                    rid: 76543210-ba98-7654-3210-000000000001
+                    status: processed
+                    progress: 100
+                    faces:
+                    - faceId: 01234567-0123-4567-89ab-000000000001
+                      segments:
+                      - startTime: 0.5
+                        endTime: 3
+                      - startTime: 5
+                        endTime: 8.5
+                    - faceId: 01234567-0123-4567-89ab-000000000002
+                      segments:
+                      - startTime: 1
+                        endTime: 2
+                      - startTime: 3.5
+                        endTime: 9
+                error:
+                  summary: Error Response Example
+                  value:
+                    rid: 76543210-ba98-7654-3210-000000000001
+                    status: input_error
+                    progress: 10
+                    message: 사용자 입력값에 오류가 있습니다.
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/data/faces:
+    x-permission: video-sync-data-face
+    post:
+      x-descriptors:
+      - default: data-face
+      x-wait-for-response: true
+      summary: Generate a New FaceId
+      description: 비디오에서 인식할 인물을 등록하기 위한 FaceId를 생성합니다.
+      tags:
+      - Video
+      operationId: post-video-v1-data-faces
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  faceId:
+                    description: 인물을 식별하는 id 입니다. 재발급되지 않기 때문에 이 값을 저장해두어야 합니다.
+                    type: string
+                example:
+                  faceId: 01234567-0123-4567-89ab-000000000001
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/data/faces/{faceId}:
+    x-permission: video-sync-data-face
+    patch:
+      x-wait-for-response: true
+      summary: Add a Picture to a FaceId
+      description: Parameter로 주어진 FaceId에 인물 사진을 추가합니다.
+      tags:
+      - Video
+      operationId: patch-video-v1-data-faces-faceid
+      parameters:
+      - name: faceId
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 비디오에서 얼굴 인식에 사용될 인물의 식별자 ID 입니다.
+          example: 01234567-0123-4567-89ab-000000000001
+          x-tags:
+          - Video
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: object
+                  properties:
+                    source:
+                      type: object
+                      properties:
+                        url:
+                          description: 인물 DB에 추가할 사진의 url 입니다.
+                          type: string
+                      required:
+                      - url
+                  required:
+                  - source
+              required:
+              - image
+      responses:
+        '204':
+          description: No Content. 요청은 성공하였으나 반환한 결과가 없습니다. 받아쓰기의 경우 받아쓰기는 완료되었으나 결과가 비어있습니다.
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '422':
+          description: Unprocessable Entity. 요청에 포함된 컨텐츠의 내용을 인식하는 데 실패하였습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+    delete:
+      x-wait-for-response: true
+      summary: Delete the FaceId
+      description: 인물DB에서 Parameter로 주어진 FaceId를 삭제합니다.
+      tags:
+      - Video
+      operationId: delete-video-v1-data-faces-faceid
+      parameters:
+      - name: faceId
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 비디오에서 얼굴 인식에 사용될 인물의 식별자 ID 입니다.
+          example: 01234567-0123-4567-89ab-000000000001
+          x-tags:
+          - Video
+      responses:
+        '204':
+          description: No Content. 요청은 성공하였으나 반환한 결과가 없습니다. 받아쓰기의 경우 받아쓰기는 완료되었으나 결과가 비어있습니다.
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '404':
+          description: Not Found.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+  /video/v1/async/detect/clappers:
+    x-permission: video-async-detect-clapper
+    post:
+      x-descriptors:
+      - default: detect-clapper
+      x-wait-for-response: false
+      summary: Detect Clappers in Video
+      description: 비디오에서 슬레이트 치는 부분을 인식합니다.
+      tags:
+      - Video
+      operationId: post-video-v1-async-detect-clappers
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                video:
+                  type: object
+                  description: '비디오 프로세싱을 요청할 비디오에 대한 설정입니다.
+
+
+                    기본적으로 `ffmpeg` 과 호환이 되어야 하며, 권장 사양은 아래와 같습니다.
+
+
+                    • `mp4`(`AVC1` 혹은 `H.264` 코덱), `FHD`, `720p`, `30FPS` 의 동영상
+
+
+                    • 3 시간 이하의 재생시간
+
+
+                    • 10GB 이하의 파일 크기'
+                  properties:
+                    source:
+                      type: object
+                      properties:
+                        url:
+                          type: string
+                          description: 다운로드 가능한 비디오의 URL 입니다.
+                      required:
+                      - url
+                  required:
+                  - source
+                callback:
+                  type: object
+                  description: '비동기 요청의 진행 상태 및 결과를 콜백으로 전달 받고 싶을 때 사용합니다. '
+                  properties:
+                    url:
+                      type: string
+                      description: '콜백을 전송받을 http(s) 를 포함한 URL 입니다.
+
+
+                        처리 중에는 진행상태를, 처리가 완료 된 뒤에는 결과 혹은 오류 상태를 `POST` 방식으로 해당 URL에 전송합니다.'
+                    headers:
+                      type: object
+                      description: 콜백 URL로 전송할 때, 헤더에 포함시켜야 하는 값이 있다면 명시해줍니다.
+                  x-tags:
+                  - Common
+                custom:
+                  type: object
+                  description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                    사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                    요청을 자동화 하여 보낼 때 유용합니다.'
+                  example:
+                    app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                  x-tags:
+                  - Common
+              required:
+              - video
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              example:
+                rid: 76543210-ba98-7654-3210-000000000001
+                custom:
+                  app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+  /video/v1/async/detect/clappers/{rid}:
+    x-permission: video-async-detect-clapper
+    get:
+      summary: Get Detected Clappers Results
+      description: 비디오에서 인식된 슬레이트 결과를 가져옵니다.
+      tags:
+      - Video
+      operationId: get-video-v1-async-detect-clappers-rid
+      parameters:
+      - example: 76543210-ba98-7654-3210-000000000001
+        name: rid
+        in: path
+        required: true
+        schema:
+          type: string
+          description: 요청 ID 입니다.
+          example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+          x-tags:
+          - Common
+        description: Request ID.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  rid:
+                    type: string
+                    description: 요청 ID 입니다.
+                    example: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                  status:
+                    type: string
+                    description: '비디오 프로세싱의 상태값 입니다.
+
+
+                      `requested`: 요청이 시작되었습니다.
+
+
+                      `uploaded`: 파일 업로드가 완료되었습니다.
+
+
+                      `file_processing`: 파일을 전처리 중 입니다.
+
+
+                      `processing`: 요청 처리중 입니다.
+
+
+                      `processed`: 요청이 처리 완료되었습니다.
+
+
+                      `input_error`: 사용자 요청 값에 오류가 있습니다. 확인 후 다시 요청해 주세요.
+
+
+                      `file_error`: 파일에 오류가 있습니다. 파일 확인 후 다시 요청해 주세요.
+
+
+                      `processing_error`: 비디오 프로세싱 중 오류가 발생하였습니다. 잠시 기다렸다가 다시 요청해 주세요.'
+                    enum:
+                    - requested
+                    - uploaded
+                    - file_processing
+                    - processing
+                    - processed
+                    - input_error
+                    - file_error
+                    - processing_error
+                    example: processed
+                    x-tags:
+                    - Video
+                  progress:
+                    type: integer
+                    description: 비디오 프로세싱 진행률 입니다.
+                    minimum: 0
+                    maximum: 100
+                    example: 100
+                  clappers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        time:
+                          description: 비디오에서 슬레이트를 친 지점입니다.
+                          type: number
+                  message:
+                    type: string
+                    description: 오류 메시지 등의 추가정보를 표시합니다.
+                  custom:
+                    type: object
+                    description: '응답에 포함하여 받고 싶은 사용자 객체를 명시합니다.
+
+
+                      사용자가 요청에 custom 객체를 명시한 경우 동일한 값이 응답에 명시되어 반환됩니다.
+
+
+                      요청을 자동화 하여 보낼 때 유용합니다.'
+                    example:
+                      app_id: xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx
+                    x-tags:
+                    - Common
+                x-tags:
+                - Video
+              examples:
+                processed:
+                  summary: Processed Response Example
+                  value:
+                    rid: 76543210-ba98-7654-3210-000000000001
+                    status: processed
+                    progress: 100
+                    clappers:
+                    - time: 10
+                    - time: 23.5
+                error:
+                  summary: Error Response Example
+                  value:
+                    rid: 76543210-ba98-7654-3210-000000000001
+                    status: input_error
+                    progress: 10
+                    message: 사용자 입력값에 오류가 있습니다.
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: 너무 많은 요청을 처리하고 있어 일시적으로 응답이 불가능한 상태입니다. 잠시 후 다시 시도해주세요.
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
