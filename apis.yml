@@ -10,6 +10,22 @@ description: >-
   ISO 27001 certified, ships an on-premise closed-network deployment for public sector, finance, healthcare and
   broadcast customers, and reports customers including LG Electronics, KT Skylife, NH Nonghyup Bank and the Daegu
   Metropolitan Government.
+deliveryModel:
+  model: saas
+  license_evidence:
+    not_product:
+    - actionpower/dagloapi-js-beta
+  open_source: unknown
+  commercial: true
+  callable_host: false
+  label: Hosted service · you call their endpoint
+  confidence: low
+  source:
+  - openapi
+  - pricing
+  - repository-not-product
+  generated: '2026-09-25'
+  method: derived
 image: https://daglo.ai/d/og-image
 url: https://raw.githubusercontent.com/api-evangelist/actionpower/refs/heads/main/apis.yml
 x-type: company
