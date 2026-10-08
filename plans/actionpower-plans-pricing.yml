@@ -96,3 +96,28 @@ enterprise:
   extras_at_additional_cost: [SSO integration, engine fine-tuning on customer data]
   price_published: false
   source: https://daglo.ai/d/en/enterprise
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - metered
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Pay as you go
+    access: other
+    model: metered
+    model_how: derived
+    units: []
+    periods: []
+  - name: Custom
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods: []
