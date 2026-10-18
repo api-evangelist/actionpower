@@ -112,6 +112,8 @@ apis:
   humanURL: https://developers.daglo.ai/guide/en/
   baseURL: https://apis.daglo.ai
   tags:
+  - Natural Language Processing
+  tags_raw:
   - NLP
   properties:
   - type: OpenAPI
