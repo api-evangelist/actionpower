@@ -1,32 +1,21 @@
 {
   "provider": "actionpower",
   "sources": [
-    "_original/actionpower-daglo-cloud-api-dev-openapi-original.yml"
+    "_original/actionpower-openapi.yml"
   ],
   "outputs": [
-    "actionpower-image-api-openapi.yml",
     "actionpower-nlp-api-openapi.yml",
     "actionpower-stt-api-openapi.yml",
-    "actionpower-tts-api-openapi.yml",
-    "actionpower-video-api-openapi.yml"
+    "actionpower-tts-api-openapi.yml"
   ],
   "archived": [],
   "errors": [],
   "warnings": [],
   "notes": [
-    "2 archived document(s) dropped as subsets of other archived documents",
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "actionpower-daglo-cloud-api-dev-openapi-original.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
-    "actionpower-daglo-cloud-api-dev-openapi-original.yml: multi-axis tagging (7 tags, 5 first tags, 2.00x duplication over 31 operations) \u2014 split on first tag, 31 operations narrowed",
-    "apis.yml register: already-registered"
+    "actionpower-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "actionpower-openapi.yml: multi-axis tagging (5 tags, 3 first tags, 2.00x duplication over 8 operations) \u2014 split on first tag, 8 operations narrowed",
+    "apis.yml register: written (+0 apis, 4 total)"
   ],
-  "skipped": [
-    "_original/actionpower-daglo-cloud-api-openapi-original.yml: archived document superseded by a larger archived document",
-    "_original/actionpower-daglo-cloud-api-dev-openapi.yml: archived document superseded by a larger archived document",
-    "actionpower-image-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "actionpower-nlp-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "actionpower-stt-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "actionpower-tts-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "actionpower-video-api-openapi.yml: previously refined output, superseded by openapi/_original/"
-  ]
+  "skipped": []
 }

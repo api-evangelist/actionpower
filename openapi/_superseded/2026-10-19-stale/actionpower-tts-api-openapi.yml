@@ -1,0 +1,167 @@
+openapi: 3.2.0
+info:
+  title: Cloud API 문서 TTS API
+  version: '1.0'
+  description: 'API를 서비스를 사용하기 위해서는 JWT 토큰이 필요합니다.
+
+
+    ## API Rate Limits
+
+
+    각 API Endpoint 별 20 requests/sec 의 Rate Limit이 적용됩니다.
+
+
+    이 허용치를 초과하는 요청량에 대해서는 HTTP 429 Too Many Request Error 응답이 나갈 수 있으며,
+
+
+    반복, 지속적으로 요청량을 초과하게 되는 경우, 비정상적인 이용으로 간주되어 요청이 차단될 수 있습니다.'
+  contact:
+    name: Customer Service
+    email: cs@daglo.ai
+  termsOfService: https://daglo.ai/terms
+  license:
+    url: https://daglo.ai/license
+    name: License
+security:
+- BearerAuth: []
+tags:
+- name: TTS
+paths:
+  /tts/v1/sync/audios:
+    x-permission: tts-sync
+    post:
+      x-descriptors:
+      - default: default
+      summary: Synthesize short speech
+      description: 텍스트를 음성으로 변환합니다. 동기화 방식이 사용됩니다.
+      tags:
+      - TTS
+      operationId: post-tts-v1-sync-audios
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              description: 주어진 텍스트를 음성으로 변환합니다.
+              properties:
+                text:
+                  type: string
+                  description: 문자열 형태의 텍스트입니다.
+                  x-tags:
+                  - Common
+              required:
+              - text
+              x-tags:
+              - TTS
+      responses:
+        '200':
+          description: Example response
+          content:
+            audio/wav:
+              schema:
+                type: string
+                format: binary
+        '204':
+          description: No Content. 요청은 성공하였으나 반환한 결과가 없습니다. 받아쓰기의 경우 받아쓰기는 완료되었으나 결과가 비어있습니다.
+        '400':
+          description: Bad Request. 요청 형식이 잘못 되었습니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '401':
+          description: Unauthorized.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '403':
+          description: Forbidden. 허용되지 않은 접근입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '413':
+          description: Payload Too Large. 요청이 너무 큽니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '415':
+          description: Unsupported Media Type.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '429':
+          description: Too Many Requests.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '500':
+          description: Internal Server Error. 서버 오류입니다.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+        '503':
+          description: Service Unavailable.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: 에러 발생 시 응답입니다.
+                properties:
+                  error:
+                    type: string
+                x-tags:
+                - Common
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer

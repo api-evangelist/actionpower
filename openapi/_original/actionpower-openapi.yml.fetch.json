@@ -1,0 +1,12 @@
+{
+ "url": "https://apis.daglo.ai/openapi.prod.yaml",
+ "final": "https://apis.daglo.ai/openapi.prod.yaml",
+ "status": 200,
+ "content_type": "application/octet-stream;charset=UTF-8",
+ "bytes": 76068,
+ "sha256": "cf504ab299ce3c8fb7f17913727128ec6c50ee67e2c0ad2d7c27a0de5349d20e",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}
