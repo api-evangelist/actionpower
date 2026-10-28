@@ -64,47 +64,139 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-ActionPower Corp. (주식회사 액션파워) is a Seoul deep-tech AI company founded in 2016 that builds its own
-end-to-end speech recognition, speaker diarization, speech synthesis and small-language-model stack. It
-sells that stack two ways: **daglo**, a voice-intelligence workspace used by more than two million people
-to record, transcribe, summarize and translate meetings, calls and lectures; and the **daglo Cloud API**
-at `https://apis.daglo.ai`, the developer platform this profile covers.
+ActionPower Corp. (주식회사 액션파워) is a Seoul-based deep-tech AI company founded in 2016 that builds its own end-to-end speech recognition, speaker diarization, speech synthesis and small-language-model stack, and sells it two ways: as daglo, a voice-intelligence workspace that records, transcribes, summarizes and translates meetings, calls and lectures for more than two million users; and as the daglo Cloud API, a developer platform at apis.daglo.ai offering synchronous and asynchronous speech-to-text, bidirectional-streaming realtime STT over gRPC, chat completion, dialogue summarization, meeting minutes, paragraph splitting and text-to-speech. The company is ISO 27001 certified, ships an on-premise closed-network deployment for public sector, finance, healthcare and broadcast customers, and reports customers including LG Electronics, KT Skylife, NH Nonghyup Bank and the Daegu Metropolitan Government.
 
-## What this profile found
+**Areas:** Speech Recognition · Speech-to-Text · Text-to-Speech · Natural Language Processing · Artificial Intelligence · Transcription · Voice · Meeting Intelligence · gRPC · South Korea
 
-| Surface | Evidence |
+## Actionpower on APIs.io
+
+Everything profiled for Actionpower is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/actionpower/](https://apis.io/providers/actionpower/)** — or go straight to one of the APIs or properties below.
+
+### APIs (6)
+
+- [daglo Realtime Streaming STT (gRPC)](https://apis.io/apis/actionpower/daglo-realtime-streaming-stt-grpc/) — Bidirectional gRPC streaming speech recognition served from apis.daglo.ai. The provider publishes the proto3 service definition (package…
+- [Actionpower Image API](https://apis.io/apis/actionpower/actionpower-image-api/) — The Image API from Actionpower — 7 operation(s) for image.
+- [Actionpower NLP API](https://apis.io/apis/actionpower/actionpower-nlp-api/) — The NLP API from Actionpower — 7 operation(s) for nlp.
+- [Actionpower STT API](https://apis.io/apis/actionpower/actionpower-stt-api/) — The STT API from Actionpower — 5 operation(s) for stt.
+- [Actionpower TTS API](https://apis.io/apis/actionpower/actionpower-tts-api/) — The TTS API from Actionpower — 1 operation(s) for tts.
+- [Actionpower Video API](https://apis.io/apis/actionpower/actionpower-video-api/) — The Video API from Actionpower — 10 operation(s) for video.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Actionpower Daglo Webhooks](https://apis.io/asyncapis/actionpower/actionpower-daglo-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [daglo](https://apis.io/servers/actionpower/daglo/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Actionpower Agentic Access](https://apis.io/agentic-access/actionpower/actionpower-agentic-access/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Actionpower Daglo Cloud Api Dev Overlay](https://apis.io/overlays/actionpower/actionpower-daglo-cloud-api-dev-overlay/)
+- [Actionpower Daglo Cloud Api Overlay](https://apis.io/overlays/actionpower/actionpower-daglo-cloud-api-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Actionpower Authentication](https://apis.io/security/actionpower/actionpower-authentication/)
+- [Actionpower Domain Security](https://apis.io/security/actionpower/actionpower-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Actionpower Plans Pricing](https://apis.io/plans/actionpower/actionpower-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Actionpower Rate Limits](https://apis.io/rate-limits/actionpower/actionpower-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://daglo.ai/)
+- [Documentation](https://developers.daglo.ai/guide/en/)
+- [Getting started](https://developers.daglo.ai/guide/en/Quick-Speech-Voice-To-Text.html)
+- [API reference](https://apis.daglo.ai/docs)
+- [Pricing](https://developers.daglo.ai/pricing)
+- [Sign up](https://daglo.ai/sign-up)
+- [Support](https://developers.daglo.ai/guide/en/FAQ.html)
+- [Blog](https://daglo.ai/d/ko/blog)
+- [Compliance](https://daglo.ai/d/en/enterprise)
+- [Terms of service](https://daglo.ai/d/en/legal/terms)
+- [Privacy policy](https://daglo.ai/d/en/legal/privacy)
+- [GitHub](https://github.com/actionpower)
+
+## API Evangelist rating
+
+**Kin Score 57.0** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
 |---|---|
-| OpenAPI 3.0.0, 9 operations (production) | `https://apis.daglo.ai/openapi.prod.yaml`, rendered at `https://apis.daglo.ai/docs` |
-| OpenAPI 3.0.0, 30 operations (dev environment) | `https://apis.daglo.ai/openapi.dev.yaml` |
-| proto3 gRPC contract for realtime streaming STT | published verbatim in the guide, saved to `grpc/` |
-| `llms.txt` | served at `https://daglo.ai/llms.txt` |
-| Published API unit pricing and three plans | `https://developers.daglo.ai/pricing` |
-| Rate limit: 20 req/sec per endpoint | stated in the OpenAPI `info.description` |
-| Webhook/callback event surface | `https://developers.daglo.ai/guide/Polling-and-Callback.html` |
-| ISO 27001 certification claim | `https://daglo.ai/d/en/enterprise` |
-| No MCP server, no A2A agent card, no `/.well-known/` documents | probed 2026-09-06, all misses recorded |
+| Discoverability | 78.6 |
+| Contract quality | 56.9 |
+| Contract governance | 4.5 |
+| Operational transparency | 47.4 |
+| Developer ergonomics | 63.7 |
+| Access clarity | 73.7 |
 
-The contract was found on the API host root, not the docs host: `developers.daglo.ai` is a single-page
-console that answers HTTP 200 with the same HTML shell for every path, while the real specification is
-served by `apis.daglo.ai` and named in the Stoplight Elements loader on `/docs`.
+**Agent readiness 35.0** — agent-ready
 
-## Two contracts that disagree
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | yes |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
 
-`apis.daglo.ai` serves both a production document and a larger dev-environment document, and the
-provider's own guide teaches an endpoint (`POST /nlp/v1/sync/chat/completions`) that appears **only** in
-the dev document. Image and video operations appear only there too. Both are saved verbatim under
-`openapi/_original/` and the divergence is recorded in `lifecycle/actionpower-lifecycle.yml`.
+**Regulatory alignment 27.3** — AI & Biometrics
 
-## Gaps worth a provider's attention
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/actionpower/](https://apis.io/providers/actionpower/).
 
-- No idempotency mechanism anywhere; a retried transcription is a second billable job.
-- No cancel, delete or any other reversal operation on the public write surface.
-- No `Retry-After` or `RateLimit-*` response headers, so a caller hitting the documented 20 req/sec limit
-  has no runtime signal to back off against.
-- Callbacks carry no signature, HMAC or shared secret — a receiver cannot verify the sender.
-- No status page, no deprecation policy, no `security.txt`, and one dated changelog entry from 2024-09-02.
-- The only first-party API client (`actionpower/dagloapi-js-beta`) has no registry release and no version
-  tag, so a consumer cannot pin it.
+## How this profile is made
 
-Everything above is assembled from public URLs; each artifact records the URL it came from and the HTTP
-status that URL returned.
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Actionpower: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/actionpower/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
