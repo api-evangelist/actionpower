@@ -72,14 +72,12 @@ ActionPower Corp. (주식회사 액션파워) is a Seoul-based deep-tech AI comp
 
 Everything profiled for Actionpower is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/actionpower/](https://apis.io/providers/actionpower/)** — or go straight to one of the APIs or properties below.
 
-### APIs (6)
+### APIs (4)
 
 - [daglo Realtime Streaming STT (gRPC)](https://apis.io/apis/actionpower/daglo-realtime-streaming-stt-grpc/) — Bidirectional gRPC streaming speech recognition served from apis.daglo.ai. The provider publishes the proto3 service definition (package…
-- [Actionpower Image API](https://apis.io/apis/actionpower/actionpower-image-api/) — The Image API from Actionpower — 7 operation(s) for image.
 - [Actionpower NLP API](https://apis.io/apis/actionpower/actionpower-nlp-api/) — The NLP API from Actionpower — 7 operation(s) for nlp.
 - [Actionpower STT API](https://apis.io/apis/actionpower/actionpower-stt-api/) — The STT API from Actionpower — 5 operation(s) for stt.
 - [Actionpower TTS API](https://apis.io/apis/actionpower/actionpower-tts-api/) — The TTS API from Actionpower — 1 operation(s) for tts.
-- [Actionpower Video API](https://apis.io/apis/actionpower/actionpower-video-api/) — The Video API from Actionpower — 10 operation(s) for video.
 
 ### Published properties
 
@@ -110,6 +108,12 @@ OpenAPI overlays, including conversational phrasing for each operation.
 - [Actionpower Daglo Cloud Api Dev Overlay](https://apis.io/overlays/actionpower/actionpower-daglo-cloud-api-dev-overlay/)
 - [Actionpower Daglo Cloud Api Overlay](https://apis.io/overlays/actionpower/actionpower-daglo-cloud-api-overlay/)
 
+#### Governance rules (1)
+
+Spectral rulesets for the provider's contracts.
+
+- [Actionpower API Rules](https://apis.io/rules/actionpower/actionpower-rules/)
+
 #### Security (2)
 
 Authentication, trust centre, and vulnerability disclosure.
@@ -128,6 +132,12 @@ Published plans, tiers and prices.
 Published request limits.
 
 - [Actionpower Rate Limits](https://apis.io/rate-limits/actionpower/actionpower-rate-limits/)
+
+#### FinOps (1)
+
+What the API costs to run, by operation.
+
+- [Actionpower Finops](https://apis.io/finops/actionpower/actionpower-finops/)
 
 ## Where to find this API
 
@@ -148,18 +158,18 @@ Links to the company's own pages. This repository publishes no copy of their spe
 
 ## API Evangelist rating
 
-**Kin Score 57.0** — strong · rubric 0.25.0 · scored 2026-10-23
+**Kin Score 58.9** — strong · rubric 0.28.1 · scored 2026-11-21
 
 | Facet | Score |
 |---|---|
-| Discoverability | 78.6 |
-| Contract quality | 56.9 |
-| Contract governance | 4.5 |
-| Operational transparency | 47.4 |
+| Discoverability | 73.2 |
+| Contract quality | 55.5 |
+| Contract governance | 18.2 |
+| Operational transparency | 45.2 |
 | Developer ergonomics | 63.7 |
-| Access clarity | 73.7 |
+| Access clarity | 85.1 |
 
-**Agent readiness 35.0** — agent-ready
+**Agent readiness 34.3** — agent-ready
 
 | Agent-readiness dimension | Result |
 |---|---|
@@ -184,8 +194,12 @@ Links to the company's own pages. This repository publishes no copy of their spe
 | Agentic Commerce | — |
 | Pagination Ratio | na |
 | Operation Distinctiveness | distinct |
+| MCP Tool Quality | na |
+| Onboarding Descriptor | — |
+| Dns Aid Index | na |
+| Markdown Negotiation | na |
 
-**Regulatory alignment 27.3** — AI & Biometrics
+**Regulatory alignment 21.8** — AI & Biometrics
 
 The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/actionpower/](https://apis.io/providers/actionpower/).
 
